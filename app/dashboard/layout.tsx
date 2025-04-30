@@ -67,8 +67,8 @@ export default function DashboardLayout({
                   {/* Profile image would go here */}
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-[#005580] font-medium">Abraham</span>
-                  <span className="text-xs text-gray-500">Technical Director</span>
+                  <span className="text-[#005580] font-medium">Admin</span>
+                  <span className="text-xs text-gray-500">Super User</span>
                 </div>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
