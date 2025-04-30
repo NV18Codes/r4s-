@@ -1,0 +1,155 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary-blue: #005580;
+  --secondary-blue: #0077b6;
+  --light-blue: #90e0ef;
+  --background-blue: #f8f9fa;
+  --footer-blue: linear-gradient(180deg, #005580 0%, #0077b6 100%);
+}
+
+body {
+  background-color: var(--background-blue);
+  margin: 0;
+  padding: 0;
+  font-family: Inter, sans-serif;
+}
+
+.login-container {
+  background: linear-gradient(135deg, #1f9ad8 0%, #106592 100%);
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.footer {
+  background: var(--footer-blue);
+  color: white;
+  text-align: center;
+  padding: 15px 0;
+  position: relative;
+  bottom: 0;
+  width: 100%;
+}
+
+.nav-button {
+  padding: 8px 20px;
+  border-radius: 5px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.signup-button {
+  border: 1px solid var(--primary-blue);
+  color: var(--primary-blue);
+}
+
+.login-button {
+  background-color: var(--primary-blue);
+  color: white;
+}
+
+.primary-button {
+  background-color: var(--primary-blue);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.primary-button:hover {
+  background-color: var(--secondary-blue);
+}
+
+.search-input {
+  border: 1px solid #e2e8f0;
+  border-radius: 5px;
+  padding: 10px 15px;
+  width: 100%;
+}
+
+.card {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.status-active {
+  background-color: #4ade80;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 5px;
+  font-size: 0.875rem;
+}
+
+.status-inactive {
+  background-color: #94a3b8;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 5px;
+  font-size: 0.875rem;
+}
+
+.status-banned {
+  background-color: #ef4444;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 5px;
+  font-size: 0.875rem;
+}
+
+.view-button {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--primary-blue);
+  font-size: 0.875rem;
+  padding: 5px 10px;
+  border: 1px solid var(--primary-blue);
+  border-radius: 5px;
+}
+
+.site-card {
+  background-color: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.site-label {
+  background-color: var(--primary-blue);
+  color: white;
+  padding: 5px 10px;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  border-radius: 5px;
+  font-weight: 500;
+}
+
+.profile-sidebar {
+  background: linear-gradient(180deg, #0077b6 0%, #90e0ef 100%);
+  color: white;
+}
+
+.map-sidebar {
+  background-color: var(--primary-blue);
+  color: white;
+}
+
+.map-menu {
+  background-color: rgba(0, 85, 128, 0.9);
+  border-radius: 10px;
+}
+
+.asset-item {
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 8px 15px;
+  border-radius: 5px;
+  margin-bottom: 5px;
+}
