@@ -128,6 +128,10 @@ export default function Login() {
           </div>
         </div>
       </main>
+      
+      <footer className="footer">
+        <p>2025 R4S ALL RIGHT RESERVED | Privacy Policy</p>
+      </footer>
     </div>
   );
 }
