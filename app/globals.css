@@ -32,7 +32,9 @@ body {
   bottom: 0;
   width: 100%;
 }
-
+.bg-custom-half-opacity {
+  background-color: rgba(0, 85, 128, 0);
+}
 .nav-button {
   padding: 8px 20px;
   border-radius: 5px;

@@ -19,6 +19,7 @@ export default function MapPage() {
   const [measurement, setMeasurement] = useState("0")
   const [searchTerm, setSearchTerm] = useState("")
   const [assetType, setAssetType] = useState("")
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(true)
   const mapRef = useRef(null)
 
   const assets = [
@@ -63,58 +64,51 @@ export default function MapPage() {
   }
 
   return (
-    <div className="relative h-screen flex flex-col">
-      {/* Main content container */}
-      <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Search bar header */}
-        <div className="absolute top-4 left-1/2 transform -translate-x-1/2 flex gap-4 z-20">
-          <div className="relative">
-            <input
-              type="text"
-              placeholder="Search Organisation"
-              className="w-64 p-2 pr-10 border border-gray-300 rounded shadow-sm"
-            />
-            <button className="absolute right-0 top-0 h-full px-3 bg-[#005580] text-white rounded-r-md">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path
-                  fillRule="evenodd"
-                  d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </button>
-          </div>
+    <div className="relative w-screen h-screen overflow-visible">
+      {/* Map as full background */}
+      <div className="absolute inset-0 z-0">
+        <MapComponent ref={mapRef} activeDrawTool={activeDrawTool} setMeasurement={setMeasurement} />
+      </div>
 
-          <div className="relative">
-            <input
-              type="text"
-              placeholder="Search Space"
-              className="w-64 p-2 pr-10 border border-gray-300 rounded shadow-sm"
-            />
-            <button className="absolute right-0 top-0 h-full px-3 bg-[#005580] text-white rounded-r-md">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path
-                  fillRule="evenodd"
-                  d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </button>
-          </div>
+      {/* Overlay UI panels and elements */}
+      {/* Search bar header */}
+      <div className="absolute top-4 left-1/2 transform -translate-x-1/2 flex gap-4 z-20">
+        <div className="relative">
+          <input
+            type="text"
+            placeholder="Search Organisation"
+            className="w-64 p-2 pr-10 border border-gray-300 rounded shadow-sm"
+          />
+          <button className="absolute right-0 top-0 h-full px-3 bg-[#005580] text-white rounded-r-md">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path
+                fillRule="evenodd"
+                d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </button>
         </div>
-
-        {/* Map container with fixed dimensions */}
-        <div className="flex-1 flex justify-center items-center p-4 mt-16">
-          <div className="w-full h-full max-w-5xl max-h-[70vh] rounded-lg overflow-hidden border-2 border-[#005580] shadow-lg">
-            <div className="relative w-full h-full">
-              <MapComponent ref={mapRef} activeDrawTool={activeDrawTool} setMeasurement={setMeasurement} />
-            </div>
-          </div>
+        <div className="relative">
+          <input
+            type="text"
+            placeholder="Search Space"
+            className="w-64 p-2 pr-10 border border-gray-300 rounded shadow-sm"
+          />
+          <button className="absolute right-0 top-0 h-full px-3 bg-[#005580] text-white rounded-r-md">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path
+                fillRule="evenodd"
+                d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </button>
         </div>
       </div>
 
       {/* Left sidebar */}
-      <div className="absolute top-20 left-4 map-sidebar rounded-lg overflow-hidden z-10">
+      <div className="absolute top-60 left-1 map-sidebar rounded-lg overflow-hidden z-20">
         <div className="flex flex-col items-center p-2 bg-[#005580] text-white">
           <button
             className="p-3 hover:bg-white/10 rounded-lg mb-4"
@@ -178,7 +172,7 @@ export default function MapPage() {
       </div>
 
       {activePanel === "create" && (
-        <div className="absolute top-20 left-20 map-menu p-4 z-10 bg-[#005580] text-white rounded-lg">
+        <div className="absolute top-60 left-24 map-menu p-4 z-30 bg-[#005580] text-white rounded-lg">
           <h2 className="text-white text-lg font-medium mb-4 uppercase">CREATE</h2>
           <div className="space-y-2">
             <button
@@ -219,7 +213,7 @@ export default function MapPage() {
       )}
 
       {activePanel === "assets" && (
-        <div className="absolute top-20 left-20 map-menu p-4 z-10 bg-[#005580] text-white rounded-lg">
+        <div className="absolute top-80 left-24 map-menu p-4 z-10 bg-[#005580] text-white rounded-lg">
           <h2 className="text-white text-lg font-medium mb-4 uppercase">ASSETS</h2>
           <div className="mb-4">
             <div className="relative">
@@ -259,7 +253,7 @@ export default function MapPage() {
       )}
 
       {activePanel === "inspections" && (
-        <div className="absolute top-20 left-20 map-menu p-4 z-10 bg-[#005580] text-white rounded-lg">
+        <div className="absolute top-[380px] left-24 map-menu p-4 z-10 bg-[#005580] text-white rounded-lg">
           <h2 className="text-white text-lg font-medium mb-4 uppercase">INSPECTIONS</h2>
           <div className="mb-4">
             <div className="relative">
@@ -299,7 +293,7 @@ export default function MapPage() {
       )}
 
       {activePanel === "reports" && (
-        <div className="absolute top-20 left-20 map-menu p-4 z-10 bg-[#005580] text-white rounded-lg">
+        <div className="absolute top-[450px] left-20 map-menu p-4 z-10 bg-[#005580] text-white rounded-lg">
           <h2 className="text-white text-lg font-medium mb-4 uppercase">REPORTS</h2>
           <div className="mb-4">
             <div className="relative">
@@ -381,8 +375,8 @@ export default function MapPage() {
       )}
 
       {/* Right sidebar */}
-      <div className="absolute top-20 right-4 bg-gradient-to-b from-[#005580] to-[#0077b6] text-white rounded-lg overflow-hidden z-10">
-        <div className="p-4 space-y-2">
+      <div className={`absolute top-60 right-10 bg-gradient-to-b from-[#005580] to-[#0077b6] text-white rounded-lg overflow-hidden z-10 transition-all duration-300 ${isSidebarCollapsed ? 'w-12' : 'w-48'}`}>
+        <div className={`p-4 space-y-2 ${isSidebarCollapsed ? 'hidden' : ''}`}>
           {menuItems.map((item, index) => (
             <Link
               key={index}
@@ -394,6 +388,21 @@ export default function MapPage() {
           ))}
         </div>
       </div>
+
+      {/* Toggle button - completely separate */}
+      <button 
+        onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+        className="absolute top-40 right-14 bg-[#005580] text-white p-2 rounded-full hover:bg-[#0077b6] transition-colors shadow-lg border-2 border-white z-20"
+      >
+        <svg 
+          xmlns="http://www.w3.org/2000/svg" 
+          className={`h-5 w-5 transform transition-transform duration-300 ${isSidebarCollapsed ? '' : 'rotate-180'}`} 
+          viewBox="0 0 20 20" 
+          fill="currentColor"
+        >
+          <path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd" />
+        </svg>
+      </button>
 
       {/* <footer className="footer w-full bg-gray-100 py-2 px-4 text-center text-gray-600 z-10">
         <p>2025 R4S ALL RIGHT RESERVED | Privacy Policy</p>

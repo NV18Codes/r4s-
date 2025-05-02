@@ -1,66 +1,74 @@
+"use client"
 import type React from "react"
 import Link from "next/link"
+import { useState } from "react"
 
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+
   return (
     <div className="flex flex-col min-h-screen">
-      <header className="bg-white p-4 shadow-sm">
+      <header className="bg-white p-4 shadow-sm border-b border-black-200">
         <div className="w-full px-4 flex items-center">
-          
-            <Link href="/dashboard" className="flex-shrink-0">
-              <div className="h-8 w-24 relative">
-                <img
-                  src="/logo.jpg"
-                  alt="R4S Logo"
-                  className="h-full w-auto object-contain"
-                />
-              </div>
-            </Link>
+          <Link href="/dashboard" className="flex-shrink-0">
+            <div className="h-8 w-24 relative">
+              <img
+                src="/logo.jpg"
+                alt="R4S Logo"
+                className="h-full w-auto object-contain"
+              />
+            </div>
+          </Link>
 
-            <nav className="ml-auto flex items-center gap-6 mr-0">
-              <Link 
-                href="/dashboard/organizations" 
-                className="text-[#005580] hover:text-[#003d5c] font-medium transition-colors"
+          <div className="flex items-center gap-6 ml-auto">
+            <div className="relative">
+              <button 
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                className="text-gray-500 hover:text-gray-700 transition-colors"
               >
-                Organizations
-              </Link>
-            </nav>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              </button>
 
-            <nav className="ml-4 flex items-center gap-6 mr-5">
-              <Link 
-                href="/dashboard/users" 
-                className="text-[#005580] hover:text-[#003d5c] font-medium transition-colors"
-              >
-               Users
-              </Link>
-            </nav>
+              {/* Dropdown Menu */}
+              {isDropdownOpen && (
+                <div className="absolute right-0 mt-2 w-48 bg-[#005580] rounded-xl shadow-lg py-1 z-50">
+                  <Link 
+                    href="/dashboard/organizations" 
+                    className="block px-4 py-2 text-sm text-white hover:bg-white/10 rounded-t-xl"
+                    onClick={() => setIsDropdownOpen(false)}
+                  >
+                    Organizations
+                  </Link>
+                  <Link 
+                    href="/dashboard/users" 
+                    className="block px-4 py-2 text-sm text-white hover:bg-white/10"
+                    onClick={() => setIsDropdownOpen(false)}
+                  >
+                    Users
+                  </Link>
+                  <Link 
+                    href="/dashboard/reports" 
+                    className="block px-4 py-2 text-sm text-white hover:bg-white/10 rounded-b-xl"
+                    onClick={() => setIsDropdownOpen(false)}
+                  >
+                    Reports
+                  </Link>
+                </div>
+              )}
+            </div>
 
-            <nav className="ml-1 flex items-center gap-6 mr-5">
-              <Link 
-                href="/dashboard/reports" 
-                className="text-[#005580] hover:text-[#003d5c] font-medium transition-colors"
-              >
-               Reports
-              </Link>
-            </nav>
-          
-
-          <div className="flex items-center gap-6">
-            <button className="text-gray-500 hover:text-gray-700 transition-colors">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
-            </button>
             <Link href="/dashboard/profile">
               <div className="flex items-center gap-3">
                 <div className="h-8 w-8 bg-gray-300 rounded-full overflow-hidden">
@@ -85,7 +93,7 @@ export default function DashboardLayout({
         </div>
       </header>
 
-      <main className="flex-grow py-6">
+      <main className="flex-grow py-0">
         <div className="bg-white rounded-lg shadow-sm min-h-[calc(100vh-12rem)]">
           {children}
         </div>
