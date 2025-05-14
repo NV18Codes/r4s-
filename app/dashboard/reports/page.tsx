@@ -16,7 +16,7 @@ export default function ReportsPage() {
         const barChart = new Chart(barCtx, {
           type: "bar",
           data: {
-            labels: ["Austria", "Brazil", "France", "Italy", "USA"],
+            labels: ["Org 1", "Org 2", "Org 3", "Org 4", "Org 5"],
             datasets: [
               {
                 label: "2003",
@@ -111,7 +111,7 @@ export default function ReportsPage() {
               },
               title: {
                 display: true,
-                text: "The Cost of an Education: Breakdown of Average Cost Per",
+                text: "The cost of repairs: breakdown of avg cost per Org/Asset (in Rand).",
                 position: "top",
                 align: "center",
                 font: {
@@ -123,20 +123,7 @@ export default function ReportsPage() {
                   bottom: 0,
                 },
               },
-              subtitle: {
-                display: true,
-                text: "Student Expenditures (in dollars) for Public Education",
-                position: "top",
-                align: "center",
-                font: {
-                  size: 14,
-                  weight: "normal",
-                },
-                padding: {
-                  top: 0,
-                  bottom: 20,
-                },
-              },
+              
             },
           },
         })

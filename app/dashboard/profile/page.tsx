@@ -17,7 +17,7 @@ export default function ProfilePage() {
         <div className="grid grid-cols-1 md:grid-cols-3">
           <div className="profile-sidebar p-6 flex flex-col items-center">
             <div className="h-24 w-24 bg-gray-300 rounded-full overflow-hidden mb-4"></div>
-            <h2 className="text-xl font-medium mb-1">Abraham</h2>
+            <h2 className="text-xl font-medium mb-1">Admin</h2>
             <p className="text-sm mb-4">Technical Director</p>
 
             <div className="bg-white text-[#005580] px-4 py-1 rounded-full mb-8">Admin</div>
@@ -41,7 +41,7 @@ export default function ProfilePage() {
                   <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
                   <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
                 </svg>
-                <span>Abraham@Email.Com</span>
+                <span>admin@zimile.co.za</span>
               </div>
 
               <div className="flex items-center gap-2 mb-4">
@@ -59,7 +59,7 @@ export default function ProfilePage() {
                     clipRule="evenodd"
                   />
                 </svg>
-                <span>Fortyfiv3</span>
+                <span>Zimile</span>
               </div>
             </div>
 
