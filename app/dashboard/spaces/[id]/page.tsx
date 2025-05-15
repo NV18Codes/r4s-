@@ -1,7 +1,19 @@
-import Link from "next/link";
+"use client"
 
-export default function SiteDetailPage({ params }: { params: { id: string } }) {
-  const siteId = params.id;
+import Link from "next/link";
+import dynamic from "next/dynamic";
+import { useState, use } from "react";
+
+// Dynamically import the Map component to avoid SSR issues with Leaflet
+const MapComponent = dynamic(() => import("../../map/map-component"), {
+  ssr: false,
+  loading: () => <div className="h-full w-full bg-gray-200 flex items-center justify-center">Loading Map...</div>,
+});
+
+export default function SiteDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const resolvedParams = use(params);
+  const siteId = resolvedParams.id;
+  const [measurement, setMeasurement] = useState("0");
 
   const sites = [
     {
@@ -77,7 +89,7 @@ export default function SiteDetailPage({ params }: { params: { id: string } }) {
         <div className="lg:col-span-2">
           <div className="bg-white rounded-lg overflow-hidden shadow-sm">
             <div className="h-96 bg-gray-200 relative">
-              {/* Map would go here */}
+              <MapComponent setMeasurement={setMeasurement} readOnly={true} />
             </div>
             <div className="bg-[#005580] text-white p-4">
               <h2 className="text-xl font-medium mb-2">Site-{siteId}</h2>
@@ -91,8 +103,8 @@ export default function SiteDetailPage({ params }: { params: { id: string } }) {
               </div>
               <div className="flex justify-end gap-2 mt-4">
                 <Link href="/dashboard/map">
-                  <button className="bg-white text-[#005580] px-4 py-2 rounded text-sm">
-                    Edit Information
+                  <button className="bg-white text-[#005580]  hover:bg-gray-800 & hover:text-white px-4 py-2 rounded text-sm">
+                    View Map
                   </button>
                 </Link>
                 <button className="bg-white text-[#005580] px-4 py-2 rounded text-sm">

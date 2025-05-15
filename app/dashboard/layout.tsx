@@ -14,12 +14,13 @@ export default function DashboardLayout({
     <div className="flex flex-col min-h-screen">
       <header className="bg-white p-4 shadow-sm border-b border-black-200">
         <div className="w-full px-4 flex items-center">
-          <Link href="/dashboard" className="flex-shrink-0">
+          <Link href="/" className="flex-shrink-0">
             <div className="h-8 w-24 relative">
               <img
                 src="/logo.jpg"
                 alt="R4S Logo"
                 className="h-full w-auto object-contain"
+                
               />
             </div>
           </Link>
@@ -44,6 +45,34 @@ export default function DashboardLayout({
               {/* Dropdown Menu */}
               {isDropdownOpen && (
                 <div className="absolute right-0 mt-2 w-48 bg-[#005580] rounded-xl shadow-lg py-1 z-50">
+                  <Link 
+                    href="/dashboard/organizations" 
+                    className="block px-4 py-2 text-sm text-white hover:bg-white/10 rounded-t-xl"
+                    onClick={() => setIsDropdownOpen(false)}
+                  >
+                    Asset Types
+                  </Link>
+                  <Link 
+                    href="" 
+                    className="block px-4 py-2 text-sm text-white hover:bg-white/10 rounded-t-xl"
+                    onClick={() => setIsDropdownOpen(false)}
+                  >
+                    Properties
+                  </Link>
+                  <Link 
+                    href="" 
+                    className="block px-4 py-2 text-sm text-white hover:bg-white/10 rounded-t-xl"
+                    onClick={() => setIsDropdownOpen(false)}
+                  >
+                    Space Types
+                  </Link>
+                  <Link 
+                    href="/dashboard/spaces" 
+                    className="block px-4 py-2 text-sm text-white hover:bg-white/10 rounded-t-xl"
+                    onClick={() => setIsDropdownOpen(false)}
+                  >
+                    Spaces
+                  </Link>
                   <Link 
                     href="/dashboard/organizations" 
                     className="block px-4 py-2 text-sm text-white hover:bg-white/10 rounded-t-xl"

@@ -20,6 +20,7 @@ export default function MapPage() {
   const [searchTerm, setSearchTerm] = useState("")
   const [assetType, setAssetType] = useState("")
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(true)
+  const [isLeftSidebarCollapsed, setIsLeftSidebarCollapsed] = useState(true)
   const mapRef = useRef(null)
 
   const assets = [
@@ -67,7 +68,7 @@ export default function MapPage() {
     <div className="relative w-screen h-screen overflow-visible">
       {/* Map as full background */}
       <div className="absolute inset-0 z-0">
-        <MapComponent ref={mapRef} activeDrawTool={activeDrawTool} setMeasurement={setMeasurement} />
+        <MapComponent ref={mapRef} setMeasurement={setMeasurement} />
       </div>
 
       {/* Overlay UI panels and elements */}
@@ -108,9 +109,9 @@ export default function MapPage() {
       </div>
 
       {/* Left sidebar */}
-      <div className="absolute top-60 left-1 map-sidebar rounded-lg overflow-hidden z-20">
-        <div className="flex flex-col items-center p-2 bg-[#005580] text-white">
-          <button
+      <div className="absolute top-[450px] left-1 map-sidebar rounded-lg overflow-hidden z-20">
+        <div className={`flex flex-col items-center p-2 bg-[#005580] text-white transition-all duration-300 ${isLeftSidebarCollapsed ? 'hidden' : ''}`}>
+          {/* <button
             className="p-3 hover:bg-white/10 rounded-lg mb-4"
             onClick={() => {
               togglePanel("create")
@@ -124,7 +125,7 @@ export default function MapPage() {
                 clipRule="evenodd"
               />
             </svg>
-          </button>
+          </button> */}
 
           <button className="p-3 hover:bg-white/10 rounded-lg mb-4" onClick={() => togglePanel("assets")}>
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
@@ -401,6 +402,21 @@ export default function MapPage() {
           fill="currentColor"
         >
           <path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd" />
+        </svg>
+      </button>
+
+      {/* Left sidebar toggle button */}
+      <button 
+        onClick={() => setIsLeftSidebarCollapsed(!isLeftSidebarCollapsed)}
+        className="absolute top-[450px] left-[70px] bg-[#005580] text-white p-2 rounded-full hover:bg-[#0077b6] transition-colors shadow-lg border-2 border-white z-30"
+      >
+        <svg 
+          xmlns="http://www.w3.org/2000/svg" 
+          className={`h-5 w-5 transform transition-transform duration-300 ${isLeftSidebarCollapsed ? '' : 'rotate-180'}`} 
+          viewBox="0 0 20 20" 
+          fill="currentColor"
+        >
+          <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
         </svg>
       </button>
 

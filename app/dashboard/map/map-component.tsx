@@ -1,13 +1,13 @@
 "use client"
 
-import { useEffect, useState, forwardRef, useImperativeHandle } from "react"
+import { useEffect, useState, forwardRef, useImperativeHandle, useRef } from "react"
 import L from "leaflet"
 import "leaflet/dist/leaflet.css"
-import "leaflet-draw/dist/leaflet.draw.css"
-import { MapContainer, TileLayer, useMap } from "react-leaflet"
-import "leaflet-draw"
+import { MapContainer, TileLayer } from "react-leaflet"
+import "@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css"
+import "@geoman-io/leaflet-geoman-free"
 
-// Extend Leaflet types to include Draw
+// Extend Leaflet types to include Geoman
 declare module "leaflet" {
   namespace Control {
     interface DrawOptions {
@@ -22,6 +22,7 @@ declare module "leaflet" {
       edit?: {
         featureGroup: L.FeatureGroup
       }
+      position?: 'topleft' | 'topright' | 'bottomleft' | 'bottomright'
     }
     interface DrawControl extends L.Control {
       new (options?: DrawOptions): DrawControl
@@ -30,94 +31,15 @@ declare module "leaflet" {
   namespace Draw {
     interface Event {
       CREATED: string
+      DRAWING: string
     }
+  }
+  interface Map {
+    pm: any;
   }
 }
 
-interface DrawControlProps {
-  activeDrawTool: string | null
-  setMeasurement: (value: string) => void
-}
-
-const DrawControl = ({ activeDrawTool, setMeasurement }: DrawControlProps) => {
-  const map = useMap()
-  const [drawControl, setDrawControl] = useState<L.Control.DrawControl | null>(null)
-
-  useEffect(() => {
-    if (drawControl) {
-      map.removeControl(drawControl)
-    }
-
-    let newDrawControl: L.Control.DrawControl | null = null
-
-    if (activeDrawTool) {
-      const DrawControl = L.Control.Draw as unknown as L.Control.DrawControl
-      newDrawControl = new DrawControl({
-        draw: {
-          polyline: activeDrawTool === "polyline",
-          polygon: false,
-          circle: activeDrawTool === "circle",
-          rectangle: false,
-          marker: activeDrawTool === "vertex",
-          circlemarker: false,
-        },
-        edit: {
-          featureGroup: new L.FeatureGroup(),
-        },
-      })
-      map.addControl(newDrawControl)
-    }
-
-    setDrawControl(newDrawControl)
-
-    return () => {
-      if (newDrawControl) {
-        map.removeControl(newDrawControl)
-      }
-    }
-  }, [activeDrawTool, map])
-
-  useEffect(() => {
-    const drawnItems = new L.FeatureGroup()
-    map.addLayer(drawnItems)
-
-    const handleDrawCreated = (e: any) => {
-      const layer = e.layer
-      drawnItems.addLayer(layer)
-
-      // Calculate measurements
-      let measurement = "0"
-      if (e.layerType === "circle") {
-        measurement = Math.round(layer.getRadius()).toString()
-      } else if (e.layerType === "polyline") {
-        const latlngs = layer.getLatLngs()
-        let distance = 0
-        for (let i = 0; i < latlngs.length - 1; i++) {
-          distance += latlngs[i].distanceTo(latlngs[i + 1])
-        }
-        measurement = Math.round(distance).toString()
-      }
-
-      setMeasurement(measurement)
-    }
-
-    map.on(L.Draw.Event.CREATED, handleDrawCreated)
-
-    return () => {
-      map.removeLayer(drawnItems)
-      map.off(L.Draw.Event.CREATED, handleDrawCreated)
-    }
-  }, [map, setMeasurement])
-
-  return null
-}
-
-interface MapComponentProps {
-  activeDrawTool: string | null
-  setMeasurement: (value: string) => void
-}
-
-const MapComponent = forwardRef<any, MapComponentProps>(({ activeDrawTool, setMeasurement }, ref) => {
+const MapComponent = forwardRef<any, { setMeasurement: (value: string) => void, readOnly?: boolean }>(( { setMeasurement, readOnly = false }, ref) => {
   const [map, setMap] = useState<L.Map | null>(null)
 
   useEffect(() => {
@@ -126,7 +48,6 @@ const MapComponent = forwardRef<any, MapComponentProps>(({ activeDrawTool, setMe
       const iconRetinaUrl = "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png"
       const iconUrl = "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png"
       const shadowUrl = "https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png"
-      
       L.Icon.Default.mergeOptions({
         iconRetinaUrl,
         iconUrl,
@@ -139,35 +60,71 @@ const MapComponent = forwardRef<any, MapComponentProps>(({ activeDrawTool, setMe
     getMap: () => map,
   }))
 
-  // Function to handle map initialization
-  const handleMapReady = () => {
-    if (map) {
-      // Set max bounds to prevent the map from being dragged outside of the world
-      const bounds = L.latLngBounds(
-        L.latLng(-90, -180),  // Southwest corner
-        L.latLng(90, 180)     // Northeast corner
-      )
-      map.setMaxBounds(bounds)
-      map.setMinZoom(2)  // Prevent zooming out too far
-      
-      // Add bounds viscosity to make it harder to drag outside bounds
-      map.options.maxBoundsViscosity = 1.0
+  useEffect(() => {
+    if (!map) return;
+    // Set max bounds to prevent the map from being dragged outside of the world
+    const bounds = L.latLngBounds(
+      L.latLng(-90, -180),  // Southwest corner
+      L.latLng(90, 180)     // Northeast corner
+    )
+    map.setMaxBounds(bounds)
+    map.setMinZoom(2)  // Prevent zooming out too far
+    map.options.maxBoundsViscosity = 1.0
+
+    // Only add Geoman controls if not in readOnly mode
+    if (!readOnly) {
+      map.pm.addControls({
+        position: 'topleft',
+        drawMarker: true,
+        drawPolyline: true,
+        drawCircle: true,
+        drawPolygon: true,
+        editMode: true,
+        dragMode: true,
+        cutPolygon: false,
+        removalMode: true,
+      })
+
+      // Prevent self-intersection for polylines and polygons
+      map.on('pm:drawstart', (e: any) => {
+        if (e.shape === 'Line' || e.shape === 'Polygon') {
+          map.pm.setGlobalOptions({ allowSelfIntersection: false })
+        }
+      })
+
+      // Measurement callback (optional, you can expand this as needed)
+      map.on('pm:create', (e: any) => {
+        if (e.shape === 'Circle') {
+          setMeasurement(Math.round(e.layer.getRadius()).toString())
+        } else if (e.shape === 'Line') {
+          const latlngs = e.layer.getLatLngs()
+          let distance = 0
+          for (let i = 0; i < latlngs.length - 1; i++) {
+            distance += latlngs[i].distanceTo(latlngs[i + 1])
+          }
+          setMeasurement(Math.round(distance).toString())
+        }
+      })
     }
-  }
+  }, [map, setMeasurement, readOnly])
 
   return (
     <MapContainer
-      center={[51.505, -0.09]}
-      zoom={13}
+      center={[-26.2041, 28.0473]}
+      zoom={7}
       style={{ height: "100%", width: "100%" }}
-      whenReady={handleMapReady}
+      whenReady={event => setMap(event.target)}
       className="leaflet-container z-0 overflow-hidden"
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      {activeDrawTool && <DrawControl activeDrawTool={activeDrawTool} setMeasurement={setMeasurement} />}
+
+{/* <TileLayer
+  attribution='Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+  url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+/> */}
     </MapContainer>
   )
 })
