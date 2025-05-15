@@ -8,7 +8,7 @@ export default function Home() {
         <Link href="/dashboard" className="flex-shrink-0">
   <div className="h-8 w-24 relative">
     <img
-      src="/logo.jpg"
+      src="/new_logo.jpeg"
       alt="R4S Logo"
       className="h-full w-auto object-contain"
     />
@@ -34,7 +34,7 @@ export default function Home() {
 
       <main className="flex-grow flex items-center justify-center p-4">
         <div className="text-center">
-          <h1 className="text-4xl font-bold text-[#005580] mb-6">Welcome to R4S</h1>
+          <h1 className="text-4xl font-bold text-[#005580] mb-6">Welcome to RoadsIntel</h1>
           <p className="text-lg mb-8">Road Management System</p>
           <div className="flex gap-4 justify-center">
             <Link href="/login" className="primary-button">

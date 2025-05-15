@@ -8,7 +8,7 @@ export default function Login() {
           <Link href="/dashboard" className="flex-shrink-0">
             <div className="h-8 w-24 relative">
               <img
-                src="/logo.jpg"
+                src="/new_logo.jpeg"
                 alt="R4S Logo"
                 className="h-full w-auto object-contain"
               />
@@ -141,7 +141,7 @@ export default function Login() {
       </main>
 
       <footer className="footer">
-        <p>2025 R4S ALL RIGHT RESERVED | Privacy Policy</p>
+        <p>2025 RoadsIntel ALL RIGHT RESERVED | Privacy Policy</p>
       </footer>
     </div>
   );

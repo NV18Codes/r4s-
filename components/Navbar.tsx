@@ -75,7 +75,7 @@ export default function Navbar({ user }: { user?: User }) {
     <header className="bg-white shadow-sm py-4 px-6">
       <div className="max-w-7xl mx-auto flex justify-between items-center">
         <Link href="/" className="flex items-center space-x-2">
-          <span className="text-2xl font-bold text-[#005580]">R4S</span>
+          <span className="text-2xl font-bold text-[#005580]">RoadsIntel</span>
         </Link>
 
         <nav className="flex items-center gap-6">
