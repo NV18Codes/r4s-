@@ -46,7 +46,7 @@ export default function DashboardLayout({
               {isDropdownOpen && (
                 <div className="absolute right-0 mt-2 w-48 bg-[#005580] rounded-xl shadow-lg py-1 z-50">
                   <Link 
-                    href="/dashboard/organizations" 
+                    href="/dashboard/asset-types" 
                     className="block px-4 py-2 text-sm text-white hover:bg-white/10 rounded-t-xl"
                     onClick={() => setIsDropdownOpen(false)}
                   >
