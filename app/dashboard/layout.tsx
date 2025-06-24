@@ -2,6 +2,7 @@
 import type React from "react"
 import Link from "next/link"
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 
 export default function DashboardLayout({
   children,
@@ -9,6 +10,12 @@ export default function DashboardLayout({
   children: React.ReactNode
 }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    await fetch("/api/logout", { method: "POST" });
+    router.push("/login");
+  };
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -20,7 +27,6 @@ export default function DashboardLayout({
                 src="/new_logo.jpeg"
                 alt="R4S Logo"
                 className="h-full w-auto object-contain"
-                
               />
             </div>
           </Link>
@@ -94,6 +100,12 @@ export default function DashboardLayout({
                   >
                     Reports
                   </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="block w-full text-left px-4 py-2 text-sm text-white hover:bg-white/10 border-t border-white/10"
+                  >
+                    Logout
+                  </button>
                 </div>
               )}
             </div>

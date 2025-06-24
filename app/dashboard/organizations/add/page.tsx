@@ -1,10 +1,58 @@
+"use client";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+
 export default function AddOrganizationPage() {
+  const [form, setForm] = useState({
+    name: "",
+    responsiblePerson: "",
+    address: "",
+    orgType: "",
+    status: true,
+    createdDate: new Date().toISOString(),
+  });
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { id, value } = e.target;
+    setForm(prev => ({ ...prev, [id]: value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const res = await fetch("/api/v1/Organisation/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
+        credentials: "include", // send cookies (token)
+      });
+      const data = await res.json();
+      if (res.ok && data?.data?.message) {
+        toast.success(data.data.message, {
+          duration: 2000,
+          onAutoClose: () => router.push("/dashboard/organizations"),
+        });
+      } else {
+        toast.error(data?.data?.message || "Failed to add organization.");
+      }
+    } catch (err) {
+      toast.error("An error occurred. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="container mx-auto p-6">
       <h1 className="text-2xl font-bold text-[#005580] mb-6">Add Organisation Information</h1>
-
       <div className="bg-white rounded-lg p-8 shadow-sm">
-        <form className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <form className="grid grid-cols-1 md:grid-cols-2 gap-6" onSubmit={handleSubmit}>
           <div>
             <label htmlFor="name" className="block text-[#005580] font-medium mb-2">
               Name
@@ -14,21 +62,25 @@ export default function AddOrganizationPage() {
               id="name"
               placeholder="Organisation Name"
               className="w-full p-3 border border-gray-200 rounded"
+              value={form.name}
+              onChange={handleChange}
+              required
             />
           </div>
-
           <div>
-            <label htmlFor="responsiblePersons" className="block text-[#005580] font-medium mb-2">
-              Responsible Persons
+            <label htmlFor="responsiblePerson" className="block text-[#005580] font-medium mb-2">
+              Responsible Person
             </label>
             <input
               type="text"
-              id="responsiblePersons"
-              placeholder="Add Users"
+              id="responsiblePerson"
+              placeholder="Add User"
               className="w-full p-3 border border-gray-200 rounded"
+              value={form.responsiblePerson}
+              onChange={handleChange}
+              required
             />
           </div>
-
           <div className="md:col-span-2">
             <label htmlFor="address" className="block text-[#005580] font-medium mb-2">
               Address
@@ -38,15 +90,23 @@ export default function AddOrganizationPage() {
               id="address"
               placeholder="Enter Address"
               className="w-full p-3 border border-gray-200 rounded"
+              value={form.address}
+              onChange={handleChange}
+              required
             />
           </div>
-
           <div>
-            <label htmlFor="type" className="block text-[#005580] font-medium mb-2">
+            <label htmlFor="orgType" className="block text-[#005580] font-medium mb-2">
               Organisation Type
             </label>
             <div className="relative">
-              <select id="type" className="w-full p-3 border border-gray-200 rounded appearance-none" defaultValue="">
+              <select
+                id="orgType"
+                className="w-full p-3 border border-gray-200 rounded appearance-none"
+                value={form.orgType}
+                onChange={handleChange}
+                required
+              >
                 <option value="" disabled>
                   Select Type
                 </option>
@@ -67,7 +127,6 @@ export default function AddOrganizationPage() {
               </div>
             </div>
           </div>
-
           <div className="flex items-center">
             <div className="flex items-center gap-2">
               <div className="h-5 w-5 bg-[#005580] rounded-sm flex items-center justify-center text-white">
@@ -82,14 +141,13 @@ export default function AddOrganizationPage() {
               <span className="text-[#005580] font-medium">Status</span>
             </div>
           </div>
-
           <div className="md:col-span-2 flex justify-end">
-            <button type="submit" className="bg-[#005580] text-white px-6 py-2 rounded">
-              Add
+            <button type="submit" className="bg-[#005580] text-white px-6 py-2 rounded" disabled={loading}>
+              {loading ? "Adding..." : "Add"}
             </button>
           </div>
         </form>
       </div>
     </div>
-  )
+  );
 }
