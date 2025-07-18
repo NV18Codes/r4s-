@@ -1,71 +1,39 @@
-import Link from "next/link"
+"use client";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { useAuth } from "../../AuthContext";
 
 export default function OrganizationsPage() {
-  const organizations = [
-    {
-      id: 1,
-      name: "Organisation-1",
-      location: "Boksburg",
-      description:
-        "Lorem Ipsum Is Simply Dummy Text Of The Printing And Typesetting Industry. Lorem Ipsum Has Been The Industry's Standard Dummy Text Ever Since.",
-    },
-    {
-      id: 2,
-      name: "Organisation-2",
-      location: "Boksburg",
-      description:
-        "Lorem Ipsum Is Simply Dummy Text Of The Printing And Typesetting Industry. Lorem Ipsum Has Been The Industry's Standard Dummy Text Ever Since.",
-    },
-    {
-      id: 3,
-      name: "Organisation-3",
-      location: "Boksburg",
-      description:
-        "Lorem Ipsum Is Simply Dummy Text Of The Printing And Typesetting Industry. Lorem Ipsum Has Been The Industry's Standard Dummy Text Ever Since.",
-    },
-    {
-      id: 4,
-      name: "Organisation-4",
-      location: "Boksburg",
-      description:
-        "Lorem Ipsum Is Simply Dummy Text Of The Printing And Typesetting Industry. Lorem Ipsum Has Been The Industry's Standard Dummy Text Ever Since.",
-    },
-    {
-      id: 5,
-      name: "Organisation-5",
-      location: "Boksburg",
-      description:
-        "Lorem Ipsum Is Simply Dummy Text Of The Printing And Typesetting Industry. Lorem Ipsum Has Been The Industry's Standard Dummy Text Ever Since.",
-    },
-    {
-      id: 6,
-      name: "Organisation-6",
-      location: "Boksburg",
-      description:
-        "Lorem Ipsum Is Simply Dummy Text Of The Printing And Typesetting Industry. Lorem Ipsum Has Been The Industry's Standard Dummy Text Ever Since.",
-    },
-    {
-      id: 7,
-      name: "Organisation-7",
-      location: "Boksburg",
-      description:
-        "Lorem Ipsum Is Simply Dummy Text Of The Printing And Typesetting Industry. Lorem Ipsum Has Been The Industry's Standard Dummy Text Ever Since.",
-    },
-    {
-      id: 8,
-      name: "Organisation-8",
-      location: "Boksburg",
-      description:
-        "Lorem Ipsum Is Simply Dummy Text Of The Printing And Typesetting Industry. Lorem Ipsum Has Been The Industry's Standard Dummy Text Ever Since.",
-    },
-    {
-      id: 9,
-      name: "Organisation-9",
-      location: "Boksburg",
-      description:
-        "Lorem Ipsum Is Simply Dummy Text Of The Printing And Typesetting Industry. Lorem Ipsum Has Been The Industry's Standard Dummy Text Ever Since.",
-    },
-  ]
+  const { token } = useAuth();
+  const [organizations, setOrganizations] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const fetchOrganizations = async () => {
+      setLoading(true);
+      setError("");
+      try {
+        const res = await fetch("/api/organization", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            accept: "text/plain",
+          },
+        });
+        const data = await res.json();
+        if (res.ok && data?.meta?.status === "Success" && Array.isArray(data.data)) {
+          setOrganizations(data.data);
+        } else {
+          setError(data?.meta?.messages?.[0]?.text || "Failed to fetch organizations.");
+        }
+      } catch (err) {
+        setError("An error occurred while fetching organizations.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    if (token) fetchOrganizations();
+  }, [token]);
 
   return (
     <div className="container mx-auto p-6">
@@ -112,39 +80,45 @@ export default function OrganizationsPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {organizations.map((org) => (
-          <div key={org.id} className="bg-white rounded-lg p-6 shadow-sm">
-            <div className="mb-4">
-              <div className="flex items-center gap-2 text-[#005580] mb-2">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                  <path
-                    fillRule="evenodd"
-                    d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-                <span>{org.location}</span>
+      {loading ? (
+        <div className="text-center py-10 text-[#005580]">Loading organizations...</div>
+      ) : error ? (
+        <div className="text-center py-10 text-red-500">{error}</div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {organizations.map((org, idx) => (
+            <div key={org.orgCode || idx} className="bg-white rounded-lg p-6 shadow-sm">
+              <div className="mb-4">
+                <div className="flex items-center gap-2 text-[#005580] mb-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path
+                      fillRule="evenodd"
+                      d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                  <span>{org.address}</span>
+                </div>
+                <h2 className="text-lg font-medium text-[#005580]">{org.name}</h2>
               </div>
-              <h2 className="text-lg font-medium text-[#005580]">{org.name}</h2>
+              <p className="text-sm text-gray-600 mb-4">{org.orgType} | {org.responsiblePerson}</p>
+              <div className="flex justify-center">
+                <Link href={`/dashboard/organizations/${org.orgCode}`} className="view-button">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                    <path
+                      fillRule="evenodd"
+                      d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                  View
+                </Link>
+              </div>
             </div>
-            <p className="text-sm text-gray-600 mb-4">{org.description}</p>
-            <div className="flex justify-center">
-              <Link href={`/dashboard/organizations/${org.id}`} className="view-button">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                  <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                  <path
-                    fillRule="evenodd"
-                    d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-                View
-              </Link>
-            </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
-  )
+  );
 }

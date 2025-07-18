@@ -3,6 +3,8 @@ import type React from "react"
 import Link from "next/link"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { useAuth } from "../AuthContext";
+import { useEffect } from "react";
 
 export default function DashboardLayout({
   children,
@@ -11,9 +13,21 @@ export default function DashboardLayout({
 }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const router = useRouter();
+  const { user, token, logout, hydrated } = useAuth();
+
+  useEffect(() => {
+    if (hydrated && !token) {
+      logout(); // clear any stale user data
+      router.replace("/login");
+    }
+  }, [token, hydrated, logout, router]);
+
+  if (!hydrated) {
+    return null; // or a loading spinner
+  }
 
   const handleLogout = async () => {
-    await fetch("/api/logout", { method: "POST" });
+    logout();
     router.push("/login");
   };
 
@@ -116,8 +130,8 @@ export default function DashboardLayout({
                   {/* Profile image would go here */}
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-[#005580] font-medium">Admin</span>
-                  <span className="text-xs text-gray-500">Super User</span>
+                  <span className="text-[#005580] font-medium">{user ? `${user.firstName} ${user.lastName}` : "Admin"}</span>
+                  <span className="text-xs text-gray-500">{user?.role || "Super User"}</span>
                 </div>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

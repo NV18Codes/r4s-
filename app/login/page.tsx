@@ -3,14 +3,16 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { toast } from "sonner";
+import { useAuth } from "../AuthContext";
 
 export default function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("Roadsintel@gmail.com");
+  const [password, setPassword] = useState("test123");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState("");
   const router = useRouter();
+  const { setAuth } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,7 +26,8 @@ export default function Login() {
         body: JSON.stringify({ email, password }),
       });
       const data = await res.json();
-      if (res.ok && data.success) {
+      if (res.ok && data?.meta?.status === "Success" && data?.data?.token && data?.data?.user) {
+        setAuth(data.data.user, data.data.token);
         toast.success("Login successful!", {
           duration: 2000,
           onAutoClose: () => {
@@ -32,7 +35,7 @@ export default function Login() {
           },
         });
       } else {
-        toast.error(data?.message || "Login failed. Please try again.");
+        toast.error(data?.data?.message || "Login failed. Please try again.");
       }
     } catch (err) {
       toast.error("An error occurred. Please try again.");

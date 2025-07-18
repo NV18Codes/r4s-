@@ -1,7 +1,8 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { useAuth } from "../../../AuthContext";
 
 export default function AddOrganizationPage() {
   const [form, setForm] = useState({
@@ -10,10 +11,38 @@ export default function AddOrganizationPage() {
     address: "",
     orgType: "",
     status: true,
-    createdDate: new Date().toISOString(),
+    parentOrganizationName: "",
   });
   const [loading, setLoading] = useState(false);
+  const [orgs, setOrgs] = useState<any[]>([]);
+  const [orgsLoading, setOrgsLoading] = useState(true);
   const router = useRouter();
+  const { token } = useAuth();
+
+  useEffect(() => {
+    const fetchOrgs = async () => {
+      setOrgsLoading(true);
+      try {
+        const res = await fetch("/api/organization", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            accept: "text/plain",
+          },
+        });
+        const data = await res.json();
+        if (res.ok && data?.meta?.status === "Success" && Array.isArray(data.data)) {
+          setOrgs(data.data);
+        } else {
+          setOrgs([]);
+        }
+      } catch {
+        setOrgs([]);
+      } finally {
+        setOrgsLoading(false);
+      }
+    };
+    if (token) fetchOrgs();
+  }, [token]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { id, value } = e.target;
@@ -24,22 +53,25 @@ export default function AddOrganizationPage() {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await fetch("/api/v1/Organisation/register", {
+      const res = await fetch("/api/organization", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(form),
-        credentials: "include", // send cookies (token)
       });
       const data = await res.json();
-      if (res.ok && data?.data?.message) {
-        toast.success(data.data.message, {
-          duration: 2000,
-          onAutoClose: () => router.push("/dashboard/organizations"),
+      if (res.ok && data?.meta?.status === "Success") {
+        toast.success("Organization created successfully!", {
+          duration: 1500,
+          onAutoClose: () => {
+            router.replace("/dashboard/organizations");
+            router.refresh();
+          },
         });
       } else {
-        toast.error(data?.data?.message || "Failed to add organization.");
+        toast.error(data?.meta?.messages?.[0]?.text || "Failed to add organization.");
       }
     } catch (err) {
       toast.error("An error occurred. Please try again.");
@@ -55,7 +87,7 @@ export default function AddOrganizationPage() {
         <form className="grid grid-cols-1 md:grid-cols-2 gap-6" onSubmit={handleSubmit}>
           <div>
             <label htmlFor="name" className="block text-[#005580] font-medium mb-2">
-              Name
+              Name <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
@@ -69,7 +101,7 @@ export default function AddOrganizationPage() {
           </div>
           <div>
             <label htmlFor="responsiblePerson" className="block text-[#005580] font-medium mb-2">
-              Responsible Person
+              Responsible Person <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
@@ -83,7 +115,7 @@ export default function AddOrganizationPage() {
           </div>
           <div className="md:col-span-2">
             <label htmlFor="address" className="block text-[#005580] font-medium mb-2">
-              Address
+              Address <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
@@ -97,7 +129,7 @@ export default function AddOrganizationPage() {
           </div>
           <div>
             <label htmlFor="orgType" className="block text-[#005580] font-medium mb-2">
-              Organisation Type
+              Organisation Type <span className="text-red-500">*</span>
             </label>
             <div className="relative">
               <select
@@ -113,6 +145,39 @@ export default function AddOrganizationPage() {
                 <option value="government">Government</option>
                 <option value="private">Private</option>
                 <option value="ngo">NGO</option>
+              </select>
+              <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+                <svg
+                  className="w-5 h-5 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </div>
+            </div>
+          </div>
+          <div>
+            <label htmlFor="parentOrganizationName" className="block text-[#005580] font-medium mb-2">
+              Parent Organization (optional)
+            </label>
+            <div className="relative">
+              <select
+                id="parentOrganizationName"
+                className="w-full p-3 border border-gray-200 rounded appearance-none"
+                value={form.parentOrganizationName}
+                onChange={handleChange}
+              >
+                <option value="">None</option>
+                {orgsLoading ? (
+                  <option disabled>Loading...</option>
+                ) : (
+                  orgs.map((org) => (
+                    <option key={org.orgCode} value={org.name}>{org.name}</option>
+                  ))
+                )}
               </select>
               <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
                 <svg
