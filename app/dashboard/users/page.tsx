@@ -1,118 +1,71 @@
-import Link from "next/link"
+"use client";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { useAuth } from "../../AuthContext";
 
 export default function UsersPage() {
-  const users = [
-    {
-      id: "01",
-      name: "John Doe",
-      email: "john@Example.Com",
-      phone: "9876543210",
-      created: "2024-01-01 10:00:00",
-      lastLogin: "2024-03-25 14:00:00",
-      role: "Admin",
-      status: "Active",
-      address: "1808 President St, Johannesburg, Gauteng.",
-    },
-    {
-      id: "02",
-      name: "John Doe",
-      email: "john@Example.Com",
-      phone: "9876543210",
-      created: "2024-01-01 10:00:00",
-      lastLogin: "2024-03-25 14:00:00",
-      role: "Admin",
-      status: "Inactive",
-      address: "1808 President St, Johannesburg, Gauteng.",
-    },
-    {
-      id: "03",
-      name: "John Doe",
-      email: "john@Example.Com",
-      phone: "9876543210",
-      created: "2024-01-01 10:00:00",
-      lastLogin: "2024-03-25 14:00:00",
-      role: "Admin",
-      status: "Banned",
-      address: "1808 President St, Johannesburg, Gauteng.",
-    },
-    {
-      id: "04",
-      name: "John Doe",
-      email: "john@Example.Com",
-      phone: "9876543210",
-      created: "2024-01-01 10:00:00",
-      lastLogin: "2024-03-25 14:00:00",
-      role: "Admin",
-      status: "Active",
-      address: "1808 President St, Johannesburg, Gauteng.",
-    },
-    {
-      id: "05",
-      name: "John Doe",
-      email: "john@Example.Com",
-      phone: "9876543210",
-      created: "2024-01-01 10:00:00",
-      lastLogin: "2024-03-25 14:00:00",
-      role: "Admin",
-      status: "Active",
-      address: "1808 President St, Johannesburg, Gauteng.",
-    },
-    {
-      id: "06",
-      name: "John Doe",
-      email: "john@Example.Com",
-      phone: "9876543210",
-      created: "2024-01-01 10:00:00",
-      lastLogin: "2024-03-25 14:00:00",
-      role: "Admin",
-      status: "Active",
-      address: "1808 President St, Johannesburg, Gauteng.",
-    },
-    {
-      id: "07",
-      name: "John Doe",
-      email: "john@Example.Com",
-      phone: "9876543210",
-      created: "2024-01-01 10:00:00",
-      lastLogin: "2024-03-25 14:00:00",
-      role: "Admin",
-      status: "Active",
-      address: "1808 President St, Johannesburg, Gauteng.",
-    },
-    {
-      id: "08",
-      name: "John Doe",
-      email: "john@Example.Com",
-      phone: "9876543210",
-      created: "2024-01-01 10:00:00",
-      lastLogin: "2024-03-25 14:00:00",
-      role: "Admin",
-      status: "Active",
-      address: "1808 President St, Johannesburg, Gauteng.",
-    },
-    {
-      id: "09",
-      name: "John Doe",
-      email: "john@Example.Com",
-      phone: "9876543210",
-      created: "2024-01-01 10:00:00",
-      lastLogin: "2024-03-25 14:00:00",
-      role: "Admin",
-      status: "Inactive",
-      address: "1808 President St, Johannesburg, Gauteng.",
-    },
-    {
-      id: "10",
-      name: "John Doe",
-      email: "john@Example.Com",
-      phone: "9876543210",
-      created: "2024-01-01 10:00:00",
-      lastLogin: "2024-03-25 14:00:00",
-      role: "Admin",
-      status: "Inactive",
-      address: "1808 President St, Johannesburg, Gauteng.",
-    },
-  ]
+  const { token } = useAuth();
+  const [organizations, setOrganizations] = useState<any[]>([]);
+  const [selectedOrgId, setSelectedOrgId] = useState<string>("");
+  const [users, setUsers] = useState<any[]>([]);
+  const [loadingOrgs, setLoadingOrgs] = useState(true);
+  const [loadingUsers, setLoadingUsers] = useState(false);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const fetchOrganizations = async () => {
+      setLoadingOrgs(true);
+      try {
+        const res = await fetch("/api/organization", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            accept: "text/plain",
+          },
+        });
+        const data = await res.json();
+        if (res.ok && data?.meta?.status === "Success" && Array.isArray(data.data)) {
+          setOrganizations(data.data);
+          if (data.data.length > 0) setSelectedOrgId(data.data[0].orgCode);
+        } else {
+          setOrganizations([]);
+        }
+      } catch {
+        setOrganizations([]);
+      } finally {
+        setLoadingOrgs(false);
+      }
+    };
+    if (token) fetchOrganizations();
+  }, [token]);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      if (!selectedOrgId) return;
+      setLoadingUsers(true);
+      setError("");
+      try {
+        const res = await fetch(`/api/organization/users?orgId=${selectedOrgId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            accept: "text/plain",
+          },
+        });
+        const data = await res.json();
+        if (res.ok && data?.meta?.status === "Success" && Array.isArray(data.data)) {
+          setUsers(data.data);
+        } else {
+          setUsers([]);
+          setError(data?.meta?.messages?.[0]?.text || "No users found.");
+        }
+      } catch {
+        setUsers([]);
+        setError("An error occurred while fetching users.");
+      } finally {
+        setLoadingUsers(false);
+      }
+    };
+    if (selectedOrgId && token) fetchUsers();
+  }, [selectedOrgId, token]);
 
   return (
     <div className="container mx-auto p-6">
@@ -130,107 +83,67 @@ export default function UsersPage() {
         </Link>
       </div>
 
-      <div className="bg-white rounded-lg p-6 mb-6 shadow-sm">
-        <div className="flex gap-2">
-          <div className="relative flex-grow">
-            <input type="text" placeholder="Search By Name, Organisation And More" className="search-input pr-10" />
-            <button className="absolute right-0 top-0 h-full px-3 bg-[#005580] text-white rounded-r-md">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path
-                  fillRule="evenodd"
-                  d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </button>
-          </div>
-          <button className="p-3 border rounded-md text-[#005580]">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-              <path
-                fillRule="evenodd"
-                d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z"
-                clipRule="evenodd"
-              />
-            </svg>
-          </button>
-        </div>
+      <div className="mb-6">
+        <label htmlFor="org-select" className="block text-[#005580] font-medium mb-2">
+          Select Organization
+        </label>
+        <select
+          id="org-select"
+          className="w-full md:w-1/3 p-3 border border-gray-200 rounded"
+          value={selectedOrgId}
+          onChange={e => setSelectedOrgId(e.target.value)}
+          disabled={loadingOrgs}
+        >
+          {loadingOrgs ? (
+            <option>Loading organizations...</option>
+          ) : organizations.length === 0 ? (
+            <option>No organizations found</option>
+          ) : (
+            organizations.map(org => (
+              <option key={org.orgCode} value={org.orgCode}>{org.name}</option>
+            ))
+          )}
+        </select>
       </div>
 
       <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-[#005580] text-white">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Id</th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Users</th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Email</th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Phone</th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Created At</th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Last Login</th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Role</th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Status</th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Address</th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Action</th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {users.map((user) => (
-                <tr key={user.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{user.id}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center">
-                      <div className="h-8 w-8 rounded-full bg-gray-300 flex-shrink-0"></div>
-                      <div className="ml-4">
-                        <div className="text-sm font-medium text-gray-900">{user.name}</div>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-[#0077b6]">{user.email}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{user.phone}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{user.created}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{user.lastLogin}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{user.role}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`status-${user.status.toLowerCase()}`}>{user.status}</span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{user.address}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    <button className="text-gray-500">•••</button>
-                  </td>
+        {loadingUsers ? (
+          <div className="p-6 text-center text-[#005580]">Loading users...</div>
+        ) : error ? (
+          <div className="p-6 text-center text-red-500">{error}</div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-[#005580] text-white">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Name</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Email</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Phone</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Role</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Status</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Address</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Created At</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        <div className="px-6 py-4 flex items-center justify-center">
-          <nav className="flex items-center gap-1">
-            <button className="px-3 py-1 border rounded text-gray-500">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                <path
-                  fillRule="evenodd"
-                  d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </button>
-            <button className="px-3 py-1 border rounded bg-[#e9d5ff] text-[#005580]">1</button>
-            <button className="px-3 py-1 border rounded text-gray-500">2</button>
-            <button className="px-3 py-1 border rounded text-gray-500">3</button>
-            <span className="px-2">...</span>
-            <button className="px-3 py-1 border rounded text-gray-500">99</button>
-            <button className="px-3 py-1 border rounded text-gray-500">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                <path
-                  fillRule="evenodd"
-                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </button>
-          </nav>
-        </div>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {users.map(user => (
+                  <tr key={user.userId} className="hover:bg-gray-50">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{user.firstName} {user.lastName}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-[#0077b6]">{user.emailId}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{user.phoneNumber}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{user.role}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className={`status-${user.isActive ? "active" : "inactive"}`}>{user.isActive ? "Active" : "Inactive"}</span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{user.address}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{user.createdDate}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
     </div>
-  )
+  );
 }

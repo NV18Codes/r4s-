@@ -161,3 +161,26 @@ body {
   border-radius: 5px;
   margin-bottom: 5px;
 }
+
+/* Toast Custom Styles */
+.toast-custom {
+  font-family: inherit;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.toast-custom[data-type="success"] {
+  background: #005580 !important;
+}
+
+.toast-custom[data-type="error"] {
+  background: #dc2626 !important;
+}
+
+.toast-custom .toast-title {
+  font-weight: 600;
+}
+
+.toast-custom .toast-description {
+  opacity: 0.9;
+}

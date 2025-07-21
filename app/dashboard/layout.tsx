@@ -2,6 +2,9 @@
 import type React from "react"
 import Link from "next/link"
 import { useState } from "react"
+import { useRouter } from "next/navigation"
+import { useAuth } from "../AuthContext";
+import { useEffect } from "react";
 
 export default function DashboardLayout({
   children,
@@ -9,6 +12,24 @@ export default function DashboardLayout({
   children: React.ReactNode
 }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+  const router = useRouter();
+  const { user, token, logout, hydrated } = useAuth();
+
+  useEffect(() => {
+    if (hydrated && !token) {
+      logout(); // clear any stale user data
+      router.replace("/login");
+    }
+  }, [token, hydrated, logout, router]);
+
+  if (!hydrated) {
+    return null; // or a loading spinner
+  }
+
+  const handleLogout = async () => {
+    logout();
+    router.push("/login");
+  };
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -20,7 +41,6 @@ export default function DashboardLayout({
                 src="/new_logo.jpeg"
                 alt="R4S Logo"
                 className="h-full w-auto object-contain"
-                
               />
             </div>
           </Link>
@@ -94,6 +114,12 @@ export default function DashboardLayout({
                   >
                     Reports
                   </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="block w-full text-left px-4 py-2 text-sm text-white hover:bg-white/10 border-t border-white/10"
+                  >
+                    Logout
+                  </button>
                 </div>
               )}
             </div>
@@ -104,8 +130,8 @@ export default function DashboardLayout({
                   {/* Profile image would go here */}
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-[#005580] font-medium">Admin</span>
-                  <span className="text-xs text-gray-500">Super User</span>
+                  <span className="text-[#005580] font-medium">{user ? `${user.firstName} ${user.lastName}` : "Admin"}</span>
+                  <span className="text-xs text-gray-500">{user?.role || "Super User"}</span>
                 </div>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
