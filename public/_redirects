@@ -1,0 +1,24 @@
+# Netlify redirects for Next.js SPA routing
+# Handle client-side routing for dashboard pages
+/dashboard/*    /dashboard/index.html    200
+/spaces/*       /spaces/index.html       200
+/users/*        /users/index.html        200
+/organizations/* /organizations/index.html 200
+/assets/*       /assets/index.html       200
+/properties/*   /properties/index.html   200
+/reports/*      /reports/index.html      200
+/inspections/*  /inspections/index.html  200
+/work-orders/*  /work-orders/index.html  200
+/checklists/*   /checklists/index.html   200
+/space-types/*  /space-types/index.html  200
+/asset-types/*  /asset-types/index.html  200
+
+# Handle API routes
+/api/*          /api/index.html          200
+
+# Handle auth pages
+/login          /login.html              200
+/signup         /signup.html             200
+
+# Fallback for all other routes
+/*              /index.html              200
