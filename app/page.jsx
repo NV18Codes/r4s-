@@ -17,6 +17,28 @@ export default function Home() {
               </div>
             </Link>
 
+            {/* Navigation Links */}
+            <nav className="hidden md:flex items-center space-x-6">
+              <Link 
+                href="/about" 
+                className="text-[#005580] hover:text-[#004466] font-medium transition-colors duration-200"
+              >
+                About
+              </Link>
+              <Link 
+                href="/community" 
+                className="text-[#005580] hover:text-[#004466] font-medium transition-colors duration-200"
+              >
+                Community
+              </Link>
+              <Link 
+                href="/contact-admin" 
+                className="text-[#005580] hover:text-[#004466] font-medium transition-colors duration-200"
+              >
+                Contact
+              </Link>
+            </nav>
+
             {/* Action Buttons */}
             <div className="flex items-center space-x-4">
               <Link 
