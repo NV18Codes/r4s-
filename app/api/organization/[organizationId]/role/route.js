@@ -1,0 +1,39 @@
+export async function POST(request, { params }) {
+  try {
+    const { organizationId } = params;
+    const body = await request.json();
+    const authHeader = request.headers.get('authorization');
+    const backendUrl = process.env.BACKEND_URL || process.env.NEXT_PUBLIC_BACKEND_URL;
+    const url = `${backendUrl}/api/v1/Organization/${organizationId}/Role`;
+
+    const res = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        accept: "application/json",
+        ...(authHeader && { Authorization: authHeader }),
+      },
+      body: JSON.stringify(body),
+    });
+
+    const data = await res.json();
+    
+    return new Response(JSON.stringify(data), {
+      status: res.status,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  } catch (error) {
+    console.error("Organization role API error:", error);
+    return new Response(
+      JSON.stringify({ error: "Internal server error" }),
+      {
+        status: 500,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+  }
+}
