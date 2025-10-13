@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Standard Next.js build for Netlify (not static export)
+  // Standard Next.js build for Netlify
   trailingSlash: true,
   images: {
     unoptimized: true

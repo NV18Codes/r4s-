@@ -4,6 +4,8 @@ import { useParams } from "next/navigation";
 import { useAuth } from "../../../AuthContext";
 import Link from "next/link";
 
+// Note: generateStaticParams not compatible with "use client" in static export
+
 export default function AssetTypeDetailPage() {
   const { id } = useParams();
   const { token } = useAuth();

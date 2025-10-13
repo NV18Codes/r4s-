@@ -10,6 +10,8 @@ const MapComponent = dynamic(() => import("../../map/map-component"), {
   loading: () => <div className="h-full w-full bg-gray-200 flex items-center justify-center">Loading Map...</div>,
 });
 
+// Note: generateStaticParams not compatible with "use client" in static export
+
 export default function SiteDetailPage({ params }) {
   const resolvedParams = use(params);
   const spaceId = resolvedParams.id;

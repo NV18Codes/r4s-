@@ -18,9 +18,14 @@ export default function Login() {
     setLoading(true);
     
     try {
-      const res = await fetch("/api/user/signin", {
+      // For static export, call backend directly
+      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://your-backend-url.com';
+      const res = await fetch(`${backendUrl}/api/v1/User/signin`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
         body: JSON.stringify({ email, password }),
       });
       

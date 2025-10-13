@@ -1,18 +1,13 @@
+# Use Netlify's Next.js plugin for automatic deployment
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
 [build]
-  # Build command for Next.js
   command = "npm run build"
-  # Directory to publish (for standard Next.js build)
   publish = ".next"
 
 [build.environment]
-  # Node.js version
   NODE_VERSION = "18"
-
-# Redirect rules for Next.js routing
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
 
 # Headers for security and performance
 [[headers]]

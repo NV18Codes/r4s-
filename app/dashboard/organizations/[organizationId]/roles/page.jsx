@@ -5,6 +5,8 @@ import { useAuth } from "../../../../AuthContext";
 import { toast } from "sonner";
 import Link from "next/link";
 
+// Note: generateStaticParams not compatible with "use client" in static export
+
 export default function OrganizationRolesPage() {
   const { organizationId } = useParams();
   const { token } = useAuth();
