@@ -360,3 +360,170 @@ body {
     background-color: hsl(200, 20%, 95%);
   }
 }
+
+/* Enhanced Card Animations */
+@keyframes cardFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card-fade-in {
+  animation: cardFadeIn 0.3s ease-out forwards;
+}
+
+/* Button Pulse Effect */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: .8;
+  }
+}
+
+.button-pulse:hover {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Responsive Container Sizes */
+@layer utilities {
+  .container-xs {
+    @apply max-w-screen-xs mx-auto;
+  }
+  
+  .container-sm {
+    @apply max-w-screen-sm mx-auto;
+  }
+  
+  .container-md {
+    @apply max-w-screen-md mx-auto;
+  }
+  
+  .container-lg {
+    @apply max-w-screen-lg mx-auto;
+  }
+  
+  .container-xl {
+    @apply max-w-screen-xl mx-auto;
+  }
+  
+  .container-2xl {
+    @apply max-w-screen-2xl mx-auto;
+  }
+}
+
+/* Better Focus States */
+button:focus,
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+  outline: 2px solid var(--primary-blue);
+  outline-offset: 2px;
+}
+
+/* Improved Touch Targets for Mobile */
+@media (max-width: 768px) {
+  button, a {
+    min-height: 44px; /* iOS recommended touch target size */
+    min-width: 44px;
+  }
+}
+
+/* Smooth Scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Enhanced Shadows */
+.shadow-soft {
+  box-shadow: 0 2px 8px rgba(0, 85, 128, 0.08);
+}
+
+.shadow-medium {
+  box-shadow: 0 4px 16px rgba(0, 85, 128, 0.12);
+}
+
+.shadow-strong {
+  box-shadow: 0 8px 24px rgba(0, 85, 128, 0.16);
+}
+
+/* Gradient Text */
+.gradient-text {
+  background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Improved Scrollbar for Main Content */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Mobile Optimizations */
+@media (max-width: 640px) {
+  /* Reduce animations on mobile for better performance */
+  * {
+    animation-duration: 0.2s !important;
+    transition-duration: 0.2s !important;
+  }
+  
+  /* Better spacing for small screens */
+  .mobile-compact {
+    padding: 0.75rem !important;
+  }
+  
+  /* Ensure readable font sizes */
+  body {
+    font-size: 14px;
+  }
+}
+
+/* Tablet Optimizations */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .container-responsive {
+    max-width: 95%;
+  }
+}
+
+/* Desktop Enhancements */
+@media (min-width: 1025px) {
+  .container-responsive {
+    max-width: 1280px;
+  }
+  
+  /* Add subtle parallax effect */
+  .parallax-element {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .parallax-element:hover {
+    transform: translateY(-2px);
+  }
+}

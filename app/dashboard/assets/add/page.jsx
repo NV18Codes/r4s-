@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { useAuth } from "../../../AuthContext";
 import Link from "next/link";
 import LoadingButton from "../../../../components/ui/loading-button";
+import { getApiUrl } from "../../../../lib/api-config";
 
 export default function AddAssetPage() {
   const [form, setForm] = useState({
@@ -26,7 +27,7 @@ export default function AddAssetPage() {
     const fetchSpaces = async () => {
       setSpacesLoading(true);
       try {
-        const res = await fetch("/api/space", {
+        const res = await fetch(getApiUrl("/api/space"), {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
@@ -50,7 +51,7 @@ export default function AddAssetPage() {
     const fetchAssetTypes = async () => {
       setTypesLoading(true);
       try {
-        const res = await fetch("/api/assettype", {
+        const res = await fetch(getApiUrl("/api/assettype"), {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
@@ -93,7 +94,7 @@ export default function AddAssetPage() {
     try {
       console.log("Creating asset with:", form);
 
-      const res = await fetch("/api/asset", {
+      const res = await fetch(getApiUrl("/api/asset"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

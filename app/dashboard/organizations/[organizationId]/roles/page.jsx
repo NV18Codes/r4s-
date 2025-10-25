@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { useAuth } from "../../../../AuthContext";
 import { toast } from "sonner";
+import { getApiUrl } from "../../../../../lib/api-config";
 import Link from "next/link";
 
 // Note: generateStaticParams not compatible with "use client" in static export
@@ -25,7 +26,7 @@ export default function OrganizationRolesPage() {
       setLoading(true);
       try {
         // Fetch all organizations to find this one
-        const orgsRes = await fetch("/api/organization", {
+        const orgsRes = await fetch(getApiUrl("/api/organization"), {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
@@ -43,7 +44,7 @@ export default function OrganizationRolesPage() {
           
           if (foundOrg) {
             // Fetch organization-specific roles
-            const rolesRes = await fetch(`/api/role/org/${foundOrg.orgId}`, {
+            const rolesRes = await fetch(getApiUrl(`/api/role/org/${foundOrg.orgId}`), {
               headers: {
                 Authorization: `Bearer ${token}`,
                 "Content-Type": "application/json",
@@ -61,7 +62,7 @@ export default function OrganizationRolesPage() {
         }
         
         // Fetch global roles
-        const globalRes = await fetch("/api/role/global", {
+        const globalRes = await fetch(getApiUrl("/api/role/global"), {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
@@ -109,7 +110,7 @@ export default function OrganizationRolesPage() {
 
       console.log("Creating role mapping:", payload);
 
-      const res = await fetch(`/api/organization/${organization.orgId}/role`, {
+      const res = await fetch(getApiUrl(`/api/organization/${organization.orgId}/role`), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

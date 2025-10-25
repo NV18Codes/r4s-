@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useAuth } from "../../AuthContext";
 import { toast } from "sonner";
+import { getApiUrl } from "../../../lib/api-config";
 
 export default function SpacesPage() {
   const { token } = useAuth();
@@ -39,7 +40,7 @@ export default function SpacesPage() {
         if (userOrgId) {
           try {
             console.log("Trying user's orgId:", userOrgId);
-            const userRes = await fetch(`/api/space/${userOrgId}`, {
+            const userRes = await fetch(getApiUrl(`/api/space/${userOrgId}`), {
               headers: {
                 Authorization: `Bearer ${token}`,
                 "Content-Type": "application/json",
@@ -63,7 +64,7 @@ export default function SpacesPage() {
         if (spacesData.length === 0) {
           try {
             console.log("Trying known space orgId:", knownSpaceOrgId);
-            const spaceRes = await fetch(`/api/space/${knownSpaceOrgId}`, {
+            const spaceRes = await fetch(getApiUrl(`/api/space/${knownSpaceOrgId}`), {
               headers: {
                 Authorization: `Bearer ${token}`,
                 "Content-Type": "application/json",
@@ -87,7 +88,7 @@ export default function SpacesPage() {
         if (spacesData.length === 0) {
           try {
             console.log("Trying all spaces endpoint");
-            const allRes = await fetch("/api/space", {
+            const allRes = await fetch(getApiUrl("/api/space"), {
               headers: {
                 Authorization: `Bearer ${token}`,
                 "Content-Type": "application/json",

@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { useAuth } from "../../../AuthContext";
 import Link from "next/link";
 import LoadingButton from "../../../../components/ui/loading-button";
+import { getApiUrl } from "../../../../lib/api-config";
 
 export default function AddSpacePage() {
   const [form, setForm] = useState({
@@ -25,7 +26,7 @@ export default function AddSpacePage() {
     const fetchOrganizations = async () => {
       setOrgsLoading(true);
       try {
-        const res = await fetch("/api/organization", {
+        const res = await fetch(getApiUrl("/api/organization"), {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
@@ -76,7 +77,7 @@ export default function AddSpacePage() {
       console.log("Latitude:", form.latitude);
       console.log("Longitude:", form.longitude);
 
-      const res = await fetch("/api/space", {
+      const res = await fetch(getApiUrl("/api/space"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { useAuth } from "../../AuthContext";
+import { getApiUrl } from "../../../lib/api-config";
 import Chart from "chart.js/auto";
 
 export default function ReportsPage() {
@@ -21,7 +22,7 @@ export default function ReportsPage() {
       setLoading(true);
       try {
         // Fetch assets
-        const assetsRes = await fetch("/api/asset", {
+        const assetsRes = await fetch(getApiUrl("/api/asset"), {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
@@ -32,7 +33,7 @@ export default function ReportsPage() {
         const assetsCount = assetsData?.data?.length || 0;
 
         // Fetch organizations
-        const orgsRes = await fetch("/api/organization", {
+        const orgsRes = await fetch(getApiUrl("/api/organization"), {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",

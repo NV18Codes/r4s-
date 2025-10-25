@@ -3,6 +3,7 @@ import Link from "next/link";
 import dynamic from "next/dynamic";
 import { useState, useEffect, use } from "react";
 import { useAuth } from "../../../AuthContext";
+import { getApiUrl } from "../../../../lib/api-config";
 
 // Dynamically import the Map component to avoid SSR issues with Leaflet
 const MapComponent = dynamic(() => import("../../map/map-component"), {
@@ -50,7 +51,7 @@ export default function SiteDetailPage({ params }) {
         if (userOrgId && !foundSpace) {
           try {
             console.log("Trying user's orgId for space details:", userOrgId);
-            const userRes = await fetch(`/api/space/${userOrgId}`, {
+            const userRes = await fetch(getApiUrl(`/api/space/${userOrgId}`), {
               headers: {
                 Authorization: `Bearer ${token}`,
                 "Content-Type": "application/json",
@@ -78,7 +79,7 @@ export default function SiteDetailPage({ params }) {
         if (!foundSpace) {
           try {
             console.log("Trying known space orgId for space details:", knownSpaceOrgId);
-            const spaceRes = await fetch(`/api/space/${knownSpaceOrgId}`, {
+            const spaceRes = await fetch(getApiUrl(`/api/space/${knownSpaceOrgId}`), {
               headers: {
                 Authorization: `Bearer ${token}`,
                 "Content-Type": "application/json",
@@ -105,7 +106,7 @@ export default function SiteDetailPage({ params }) {
         if (!foundSpace) {
           try {
             console.log("Trying all spaces for space details");
-            const allRes = await fetch("/api/space", {
+            const allRes = await fetch(getApiUrl("/api/space"), {
               headers: {
                 Authorization: `Bearer ${token}`,
                 "Content-Type": "application/json",
@@ -145,7 +146,7 @@ export default function SiteDetailPage({ params }) {
 
     const fetchAssets = async () => {
       try {
-        const res = await fetch("/api/asset", {
+        const res = await fetch(getApiUrl("/api/asset"), {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",

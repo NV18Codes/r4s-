@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useAuth } from "../../../AuthContext";
+import { getApiUrl } from "../../../../lib/api-config";
 
 export default function AddUserPage() {
   const [form, setForm] = useState({
@@ -26,7 +27,7 @@ export default function AddUserPage() {
     const fetchOrganizations = async () => {
       setOrgsLoading(true);
       try {
-        const res = await fetch("/api/organization", {
+        const res = await fetch(getApiUrl("/api/organization"), {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
@@ -117,7 +118,7 @@ export default function AddUserPage() {
         const fetchOrgRoles = async () => {
           setRolesLoading(true);
           try {
-            const res = await fetch(`/api/role/org/${selectedOrg.orgId}`, {
+            const res = await fetch(getApiUrl(`/api/role/org/${selectedOrg.orgId}`), {
               headers: {
                 Authorization: `Bearer ${token}`,
                 "Content-Type": "application/json",
@@ -168,7 +169,7 @@ export default function AddUserPage() {
       console.log("Available roles:", availableRoles);
       console.log("Role exists in available roles?", availableRoles.includes(form.roleName));
       
-      const res = await fetch("/api/user/add-user-org", {
+      const res = await fetch(getApiUrl("/api/user/add-user-org"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

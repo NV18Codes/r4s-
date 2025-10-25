@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useAuth } from "../../AuthContext";
 import { toast } from "sonner";
+import { getApiUrl } from "../../../lib/api-config";
 
 // Delete Confirmation Modal Component
 function DeleteModal({ isOpen, onClose, onConfirm, assetTypeName }) {
@@ -56,7 +57,7 @@ export default function AssetTypesPage() {
       setLoading(true);
       setError("");
       try {
-        const res = await fetch("/api/assettype", {
+        const res = await fetch(getApiUrl("/api/assettype"), {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
@@ -102,7 +103,7 @@ export default function AssetTypesPage() {
 
     setDeleting(true);
     try {
-      const res = await fetch(`/api/assettype?AssetTypeId=${assetTypeId}`, {
+      const res = await fetch(getApiUrl(`/api/assettype?AssetTypeId=${assetTypeId}`), {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,

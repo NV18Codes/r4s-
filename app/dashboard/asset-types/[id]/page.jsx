@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { useAuth } from "../../../AuthContext";
 import Link from "next/link";
+import { getApiUrl } from "../../../../lib/api-config";
 
 // Note: generateStaticParams not compatible with "use client" in static export
 
@@ -18,7 +19,7 @@ export default function AssetTypeDetailPage() {
       setLoading(true);
       setError("");
       try {
-        const res = await fetch(`/api/assettype/${id}`, {
+        const res = await fetch(getApiUrl(`/api/assettype/${id}`), {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",

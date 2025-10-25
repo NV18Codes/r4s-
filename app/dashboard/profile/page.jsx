@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "../../AuthContext";
 import { toast } from "sonner";
 import Link from "next/link";
+import { getApiUrl } from "../../../lib/api-config";
 
 export default function ProfilePage() {
   const { user, token } = useAuth();
@@ -16,7 +17,7 @@ export default function ProfilePage() {
       setLoading(true);
       try {
         // Fetch profile image/data from backend
-        const res = await fetch("/api/profile/GetProfile", {
+        const res = await fetch(getApiUrl("/api/profile/GetProfile"), {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
@@ -89,7 +90,7 @@ export default function ProfilePage() {
       console.log("Token present:", !!token);
       console.log("User ID:", user.userId);
 
-      const res = await fetch("/api/profile/uploadImage", {
+      const res = await fetch(getApiUrl("/api/profile/uploadImage"), {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,

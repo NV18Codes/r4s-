@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "../../AuthContext";
 import Link from "next/link";
 import { toast } from "sonner";
+import { getApiUrl } from "../../../lib/api-config";
 
 export default function SpaceTypesPage() {
   const { token, user } = useAuth();
@@ -33,7 +34,7 @@ export default function SpaceTypesPage() {
       console.log("=== FETCHING SPACE TYPES ===");
       console.log("Token present:", !!token);
 
-      const res = await fetch("/api/spacetype", { headers });
+      const res = await fetch(getApiUrl("/api/spacetype"), { headers });
       console.log("Response status:", res.status);
       console.log("Response ok:", res.ok);
 
@@ -82,7 +83,7 @@ export default function SpaceTypesPage() {
       console.log("=== CREATE SPACE TYPE ===");
       console.log("Form data:", newSpaceType);
 
-      const res = await fetch("/api/spacetype", {
+      const res = await fetch(getApiUrl("/api/spacetype"), {
         method: "POST",
         headers,
         body: JSON.stringify(newSpaceType),
@@ -118,7 +119,7 @@ export default function SpaceTypesPage() {
       console.log("=== DELETE SPACE TYPE ===");
       console.log("Space Type ID:", spaceTypeId);
 
-      const res = await fetch(`/api/spacetype/${spaceTypeId}`, {
+      const res = await fetch(getApiUrl(`/api/spacetype/${spaceTypeId}`), {
         method: "DELETE",
         headers,
       });

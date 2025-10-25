@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "../../../AuthContext";
 import { toast } from "sonner";
 import Link from "next/link";
+import { getApiUrl } from "../../../../lib/api-config";
 
 export default function EditProfilePage() {
   const { user, token, setAuth } = useAuth();
@@ -34,7 +35,7 @@ export default function EditProfilePage() {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await fetch("/api/profile/GetProfile", {
+        const res = await fetch(getApiUrl("/api/profile/GetProfile"), {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
@@ -98,7 +99,7 @@ export default function EditProfilePage() {
 
       console.log("Uploading to /api/profile/uploadImage with userId:", user.userId);
 
-      const res = await fetch("/api/profile/uploadImage", {
+      const res = await fetch(getApiUrl("/api/profile/uploadImage"), {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -148,7 +149,7 @@ export default function EditProfilePage() {
     try {
       console.log("Updating profile with:", form);
 
-      const res = await fetch("/api/user", {
+      const res = await fetch(getApiUrl("/api/user"), {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",

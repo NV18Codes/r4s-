@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../AuthContext";
+import { getApiUrl } from "../../../lib/api-config";
 
 export default function UsersPage() {
   const { token } = useAuth();
@@ -16,7 +17,7 @@ export default function UsersPage() {
     const fetchOrganizations = async () => {
       setLoadingOrgs(true);
       try {
-        const res = await fetch("/api/organization", {
+        const res = await fetch(getApiUrl("/api/organization"), {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
@@ -45,7 +46,7 @@ export default function UsersPage() {
       setLoadingUsers(true);
       setError("");
       try {
-        const res = await fetch(`/api/organization/${selectedOrgId}/users`, {
+        const res = await fetch(getApiUrl(`/api/organization/${selectedOrgId}/users`), {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",

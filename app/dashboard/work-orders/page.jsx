@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useAuth } from "../../AuthContext";
+import { getApiUrl } from "../../../lib/api-config";
 import Link from "next/link";
 
 export default function WorkOrdersPage() {
@@ -23,7 +24,7 @@ export default function WorkOrdersPage() {
         accept: "application/json",
       };
 
-      const res = await fetch("/api/workorder", { headers });
+      const res = await fetch(getApiUrl("/api/workorder"), { headers });
       const data = await res.json();
 
       if (res.ok && data?.meta?.status === "Success") {

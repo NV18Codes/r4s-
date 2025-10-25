@@ -8,6 +8,10 @@ const config = {
   ],
   theme: {
     extend: {
+      screens: {
+        'xs': '475px',
+        '3xl': '1920px',
+      },
       colors: {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
@@ -21,6 +25,16 @@ const config = {
         },
         primary: {
           DEFAULT: "#005580",
+          50: "#e6f2f7",
+          100: "#cce5ef",
+          200: "#99cbdf",
+          300: "#66b1cf",
+          400: "#3397bf",
+          500: "#005580",
+          600: "#004466",
+          700: "#00334d",
+          800: "#002233",
+          900: "#00111a",
           light: "#0077b6",
           lighter: "#90e0ef",
         },
@@ -66,6 +80,13 @@ const config = {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+      spacing: {
+        '128': '32rem',
+        '144': '36rem',
+      },
+      fontSize: {
+        'xxs': '0.625rem',
+      },
       keyframes: {
         "accordion-down": {
           from: {
@@ -83,10 +104,30 @@ const config = {
             height: "0",
           },
         },
+        "fade-in": {
+          from: {
+            opacity: "0",
+            transform: "translateY(10px)",
+          },
+          to: {
+            opacity: "1",
+            transform: "translateY(0)",
+          },
+        },
+        "slide-in": {
+          from: {
+            transform: "translateX(-100%)",
+          },
+          to: {
+            transform: "translateX(0)",
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "fade-in": "fade-in 0.3s ease-out",
+        "slide-in": "slide-in 0.3s ease-out",
       },
     },
   },

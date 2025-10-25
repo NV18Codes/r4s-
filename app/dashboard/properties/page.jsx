@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "../../AuthContext";
 import Link from "next/link";
 import { toast } from "sonner";
+import { getApiUrl } from "../../../lib/api-config";
 
 export default function PropertiesPage() {
   const { token, user } = useAuth();
@@ -35,7 +36,7 @@ export default function PropertiesPage() {
       console.log("Token present:", !!token);
       console.log("Headers:", headers);
 
-      const res = await fetch("/api/attributes", { headers });
+      const res = await fetch(getApiUrl("/api/attributes"), { headers });
       console.log("Response status:", res.status);
       console.log("Response ok:", res.ok);
 
@@ -83,7 +84,7 @@ export default function PropertiesPage() {
         accept: "application/json",
       };
 
-      const res = await fetch("/api/attributes", {
+      const res = await fetch(getApiUrl("/api/attributes"), {
         method: "POST",
         headers,
         body: JSON.stringify(newAttribute),
@@ -115,7 +116,7 @@ export default function PropertiesPage() {
         accept: "application/json",
       };
 
-      const res = await fetch(`/api/attributes/${attributeId}`, {
+      const res = await fetch(getApiUrl(`/api/attributes/${attributeId}`), {
         method: "DELETE",
         headers,
       });

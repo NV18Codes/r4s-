@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "../../../AuthContext";
 import { toast } from "sonner";
 import Link from "next/link";
+import { getApiUrl } from "../../../../lib/api-config";
 
 export default function ChangePasswordPage() {
   const { user, token } = useAuth();
@@ -58,7 +59,7 @@ export default function ChangePasswordPage() {
     try {
       console.log("Changing password for user:", form.userId);
 
-      const res = await fetch("/api/user/update-password", {
+      const res = await fetch(getApiUrl("/api/user/update-password"), {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",

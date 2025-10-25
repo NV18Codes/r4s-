@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useAuth } from "../../../AuthContext";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { getApiUrl } from "../../../../lib/api-config";
 
 export default function AddChecklistPage() {
   const { token } = useAuth();
@@ -28,7 +29,7 @@ export default function AddChecklistPage() {
       console.log("=== CREATE CHECKLIST REQUEST ===");
       console.log("Form data:", formData);
 
-      const res = await fetch("/api/checklist", {
+      const res = await fetch(getApiUrl("/api/checklist"), {
         method: "POST",
         headers,
         body: JSON.stringify(formData),

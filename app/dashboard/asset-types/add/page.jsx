@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useAuth } from "../../../AuthContext";
 import Link from "next/link";
+import { getApiUrl } from "../../../../lib/api-config";
 
 export default function AddAssetTypePage() {
   const [form, setForm] = useState({
@@ -29,7 +30,7 @@ export default function AddAssetTypePage() {
 
     setLoading(true);
     try {
-      const res = await fetch("/api/assettype", {
+      const res = await fetch(getApiUrl("/api/assettype"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

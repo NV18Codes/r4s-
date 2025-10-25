@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { useAuth } from "../../../AuthContext";
 import { toast } from "sonner";
+import { getApiUrl } from "../../../../lib/api-config";
 import Link from "next/link";
 
 // Note: generateStaticParams not compatible with "use client" in static export
@@ -24,7 +25,7 @@ export default function OrganizationDetailPage() {
       setError("");
       try {
         // First, get all organizations to find the one with matching organizationId
-        const res = await fetch("/api/organization", {
+        const res = await fetch(getApiUrl("/api/organization"), {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
@@ -65,7 +66,7 @@ export default function OrganizationDetailPage() {
   const fetchOrganizationUsers = async (orgId) => {
     setUsersLoading(true);
     try {
-      const res = await fetch(`/api/organization/${orgId}/users`, {
+      const res = await fetch(getApiUrl(`/api/organization/${orgId}/users`), {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",

@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useAuth } from "../../../AuthContext";
+import { getApiUrl } from "../../../../lib/api-config";
 
 export default function AddOrganizationPage() {
   const [form, setForm] = useState({
@@ -23,7 +24,7 @@ export default function AddOrganizationPage() {
     const fetchOrgs = async () => {
       setOrgsLoading(true);
       try {
-        const res = await fetch("/api/organization", {
+        const res = await fetch(getApiUrl("/api/organization"), {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
@@ -54,7 +55,7 @@ export default function AddOrganizationPage() {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await fetch("/api/organization", {
+      const res = await fetch(getApiUrl("/api/organization"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
