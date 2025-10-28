@@ -24,10 +24,12 @@ app.use(cors({
   origin: [
     'https://roadsintel.netlify.app',
     'http://localhost:3000',
+    'http://localhost:3001',
+    process.env.FRONTEND_URL,
     'https://*.netlify.app'
-  ],
+  ].filter(Boolean),
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'Accept']
 }));
 
