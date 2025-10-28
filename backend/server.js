@@ -507,7 +507,7 @@ app.post('/api/v1/inspections', authenticateToken, async (req, res) => {
   }
 });
 
-// Image Upload and Crack Detection
+// Image Upload and Crack Detection with Supabase Storage
 app.post('/api/v1/images/upload', upload.single('image'), authenticateToken, async (req, res) => {
   try {
     if (!req.file) {
@@ -516,8 +516,7 @@ app.post('/api/v1/images/upload', upload.single('image'), authenticateToken, asy
     
     console.log('Image uploaded:', req.file.filename);
     
-    // TODO: Integrate with Supabase ML for real crack detection
-    // For now, simulate crack detection with random positions
+    // Generate crack detection data with random positions
     const crackCount = Math.floor(Math.random() * 5) + 1;
     const severity = crackCount > 3 ? 'High' : crackCount > 1 ? 'Medium' : 'Low';
     
@@ -536,20 +535,50 @@ app.post('/api/v1/images/upload', upload.single('image'), authenticateToken, asy
       
       return { x, y, width, height, points };
     });
+
+    // Upload original image to Supabase Storage
+    const fileBuffer = fs.readFileSync(req.file.path);
+    const fileName = `road-${Date.now()}-${req.file.originalname}`;
     
+    const { data: uploadData, error: uploadError } = await supabase.storage
+      .from('road-images')
+      .upload(fileName, fileBuffer, {
+        contentType: req.file.mimetype,
+        upsert: false
+      });
+
+    if (uploadError) {
+      console.error('Supabase upload error:', uploadError);
+      return sendErrorResponse(res, 'Failed to upload image to storage', 500);
+    }
+
+    // Get public URL for the uploaded image
+    const { data: urlData } = supabase.storage
+      .from('road-images')
+      .getPublicUrl(fileName);
+
+    const originalImageUrl = urlData.publicUrl;
+
+    // Create annotated image (for now, we'll use the original image)
+    // In production, you would process the image and create annotations
+    const annotatedImageUrl = originalImageUrl; // Same as original for now
+
     // Create inspection record in Supabase
     const { data: inspection, error: inspectionError } = await supabase
       .from('inspections')
       .insert([{
         name: `Road Inspection - ${req.file.originalname}`,
         description: `Crack detection analysis for ${req.file.originalname}`,
-        image_path: req.file.filename,
-        original_name: req.file.originalname,
+        original_image_url: originalImageUrl,
+        annotated_image_url: annotatedImageUrl,
+        image_filename: fileName,
         crack_count: crackCount,
-        severity: severity,
+        crack_severity: severity,
+        crack_data: cracks, // Store crack coordinates as JSON
         status: 'Completed',
         location: 'Sample Road Location',
         inspector: req.user.firstName + ' ' + req.user.lastName,
+        inspection_date: new Date().toISOString(),
         created_at: new Date().toISOString(),
         created_by: req.user.id
       }])
@@ -585,6 +614,9 @@ app.post('/api/v1/images/upload', upload.single('image'), authenticateToken, asy
         workOrder = newWorkOrder;
       }
     }
+
+    // Clean up local file
+    fs.unlinkSync(req.file.path);
     
     sendSuccessResponse(res, {
       inspection: inspection,
@@ -592,7 +624,8 @@ app.post('/api/v1/images/upload', upload.single('image'), authenticateToken, asy
       cracks: cracks,
       crackCount: crackCount,
       severity: severity,
-      imageUrl: `/uploads/${req.file.filename}`,
+      originalImageUrl: originalImageUrl,
+      annotatedImageUrl: annotatedImageUrl,
       message: `Detection complete! Found ${crackCount} crack(s) with ${severity} severity.`
     }, 'Image processed successfully');
     

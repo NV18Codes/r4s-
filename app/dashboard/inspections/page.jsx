@@ -215,23 +215,54 @@ export default function InspectionsPage() {
                 </div>
 
                 {/* Annotated Image */}
-                {uploadResult.imageUrl && (
+                {uploadResult && (
                   <div className="border-2 border-gray-300 rounded-lg p-4 bg-gray-50">
-                    <h3 className="text-lg font-semibold mb-3 text-gray-900">Annotated Image</h3>
-                    <img 
-                      src={selectedFile ? URL.createObjectURL(selectedFile) : uploadResult.imageUrl} 
-                      alt="Uploaded road" 
-                      className="w-full rounded-lg border border-gray-300"
-                    />
+                    <h3 className="text-lg font-semibold mb-3 text-gray-900">Crack Detection Results</h3>
+                    
+                    {/* Original Image */}
+                    {uploadResult.originalImageUrl && (
+                      <div className="mb-4">
+                        <h4 className="font-medium mb-2">Original Image:</h4>
+                        <img 
+                          src={uploadResult.originalImageUrl} 
+                          alt="Original road image" 
+                          className="w-full rounded-lg border border-gray-300"
+                        />
+                      </div>
+                    )}
+
+                    {/* Crack Details */}
                     {uploadResult.cracks && uploadResult.cracks.length > 0 && (
                       <div className="mt-4 p-4 bg-white rounded-lg">
-                        <h4 className="font-semibold mb-2">Crack Details:</h4>
-                        <div className="grid grid-cols-2 gap-2 text-sm">
+                        <h4 className="font-semibold mb-3">Crack Analysis:</h4>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
                           {uploadResult.cracks.map((crack, idx) => (
-                            <div key={idx} className="border border-gray-300 p-2 rounded">
-                              <strong>Crack {idx + 1}:</strong> Position ({Math.round(crack.x)}, {Math.round(crack.y)})
+                            <div key={idx} className="border border-gray-300 p-3 rounded-lg">
+                              <div className="flex items-center gap-2 mb-2">
+                                <div className={`w-3 h-3 rounded-full ${
+                                  uploadResult.severity === 'High' ? 'bg-red-500' : 
+                                  uploadResult.severity === 'Medium' ? 'bg-orange-500' : 'bg-yellow-500'
+                                }`}></div>
+                                <strong>Crack {idx + 1}</strong>
+                              </div>
+                              <p><strong>Position:</strong> ({Math.round(crack.x)}, {Math.round(crack.y)})</p>
+                              <p><strong>Size:</strong> {Math.round(crack.width)} × {Math.round(crack.height)} pixels</p>
+                              <p><strong>Points:</strong> {crack.points.length} detected points</p>
                             </div>
                           ))}
+                        </div>
+                        
+                        {/* Summary */}
+                        <div className="mt-4 p-3 bg-blue-50 rounded-lg">
+                          <div className="flex items-center gap-2">
+                            <span className="text-lg">📊</span>
+                            <div>
+                              <p className="font-semibold">Detection Summary</p>
+                              <p className="text-sm text-gray-600">
+                                Found {uploadResult.crackCount} crack(s) with {uploadResult.severity} severity
+                              </p>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     )}
