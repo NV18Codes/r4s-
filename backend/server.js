@@ -515,9 +515,25 @@ app.post('/api/v1/images/upload', upload.single('image'), authenticateToken, asy
     console.log('Image uploaded:', req.file.filename);
     
     // TODO: Integrate with Supabase ML for real crack detection
-    // For now, simulate crack detection
+    // For now, simulate crack detection with random positions
     const crackCount = Math.floor(Math.random() * 5) + 1;
     const severity = crackCount > 3 ? 'High' : crackCount > 1 ? 'Medium' : 'Low';
+    
+    // Generate random crack positions for visualization
+    const cracks = Array.from({ length: crackCount }, () => {
+      const x = Math.random() * 800 + 100;
+      const y = Math.random() * 600 + 100;
+      const width = Math.random() * 150 + 50;
+      const height = Math.random() * 80 + 30;
+      
+      // Generate random points along the crack
+      const points = Array.from({ length: 5 }, () => ({
+        x: x + Math.random() * width,
+        y: y + Math.random() * height
+      }));
+      
+      return { x, y, width, height, points };
+    });
     
     // Create inspection record in Supabase
     const { data: inspection, error: inspectionError } = await supabase
@@ -571,6 +587,10 @@ app.post('/api/v1/images/upload', upload.single('image'), authenticateToken, asy
     sendSuccessResponse(res, {
       inspection: inspection,
       workOrder: workOrder,
+      cracks: cracks,
+      crackCount: crackCount,
+      severity: severity,
+      imageUrl: `/uploads/${req.file.filename}`,
       message: `Detection complete! Found ${crackCount} crack(s) with ${severity} severity.`
     }, 'Image processed successfully');
     

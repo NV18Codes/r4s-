@@ -29,7 +29,7 @@ export default function InspectionsPage() {
         accept: "application/json",
       };
 
-      const res = await fetch(getApiUrl("/api/inspection"), { 
+      const res = await fetch(getApiUrl("/api/inspections"), { 
         headers,
         method: 'GET'
       });
@@ -75,84 +75,45 @@ export default function InspectionsPage() {
 
     setUploading(true);
     try {
-      // Convert image to base64
-      const reader = new FileReader();
+      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://r4s.onrender.com';
       
-      reader.onload = async () => {
-        try {
-          const base64Data = reader.result;
-          const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
-          
-          // Detect environment
-          const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-          const isNetlify = window.location.hostname.includes('netlify.app');
-          
-          console.log('Environment:', { isLocal, isNetlify, backendUrl });
-          
-          // Use Netlify function if on Netlify domain, otherwise use localhost
-          let uploadUrl;
-          if (isNetlify) {
-            uploadUrl = '/.netlify/functions/upload-image';
-          } else {
-            uploadUrl = `${backendUrl || 'http://localhost:3001'}/images`;
-          }
+      // Create FormData
+      const formData = new FormData();
+      formData.append('image', selectedFile);
 
-          const requestBody = { image: base64Data, filename: selectedFile.name };
+      const uploadUrl = `${backendUrl}/api/v1/images/upload`;
+      
+      console.log('Uploading to:', uploadUrl);
+      
+      const res = await fetch(uploadUrl, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+        body: formData,
+      });
 
-          console.log('Uploading to:', uploadUrl);
-          
-          const res = await fetch(uploadUrl, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(requestBody),
-          });
-
-          // Check if response is ok and has content
-          if (!res.ok) {
-            const errorText = await res.text();
-            console.error('Upload failed:', res.status, errorText);
-            toast.error(`Upload failed: ${res.statusText}`);
-            return;
-          }
-
-          const text = await res.text();
-          if (!text) {
-            toast.error("Empty response from server");
-            return;
-          }
-
-          let data;
-          try {
-            data = JSON.parse(text);
-          } catch (jsonError) {
-            console.error('Failed to parse JSON:', text);
-            toast.error("Invalid response from server");
-            return;
-          }
-
-          // Success case - data is already parsed
-          setUploadResult(data);
-          toast.success(`Detection complete! Found ${data.crackCount || 0} cracks`);
-          setSelectedFile(null);
-        } catch (error) {
-          console.error("Upload error:", error);
-          toast.error(error.message || "Failed to upload image");
-        } finally {
-          setUploading(false);
-        }
-      };
-
-      reader.onerror = () => {
-        toast.error("Failed to read image file");
+      if (!res.ok) {
+        const errorText = await res.text();
+        console.error('Upload failed:', res.status, errorText);
+        toast.error(`Upload failed: ${res.statusText}`);
         setUploading(false);
-      };
+        return;
+      }
 
-      reader.readAsDataURL(selectedFile);
+      const response = await res.json();
+      
+      // Extract data from response
+      const data = response?.data || response;
+      
+      setUploadResult(data);
+      toast.success(data.message || `Detection complete! Found ${data.crackCount || 0} cracks`);
+      setSelectedFile(null);
+      fetchInspections(); // Refresh inspections list
     } catch (error) {
       console.error("Upload error:", error);
-      toast.error("Failed to upload image");
+      toast.error(error.message || "Failed to upload image");
+    } finally {
       setUploading(false);
     }
   };
@@ -235,22 +196,47 @@ export default function InspectionsPage() {
             )}
 
             {uploadResult && (
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                <div className="flex items-center gap-3">
-                  <div className="text-2xl">
-                    {uploadResult.status === 'completed' ? '✅' : '⏳'}
-                  </div>
-                  <div>
-                    <p className="font-medium text-gray-900">
-                      Status: {uploadResult.status}
-                    </p>
-                    {uploadResult.crackCount !== undefined && (
-                      <p className="text-sm text-gray-600">
-                        Cracks detected: {uploadResult.crackCount}
+              <div className="space-y-4">
+                {/* Results Summary */}
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="text-2xl">✅</div>
+                    <div>
+                      <p className="font-medium text-gray-900">
+                        Detection Complete!
                       </p>
-                    )}
+                      {uploadResult.crackCount !== undefined && (
+                        <p className="text-sm text-gray-600">
+                          Cracks detected: {uploadResult.crackCount} | Severity: {uploadResult.severity || 'N/A'}
+                        </p>
+                      )}
+                    </div>
                   </div>
                 </div>
+
+                {/* Annotated Image */}
+                {uploadResult.imageUrl && (
+                  <div className="border-2 border-gray-300 rounded-lg p-4 bg-gray-50">
+                    <h3 className="text-lg font-semibold mb-3 text-gray-900">Annotated Image</h3>
+                    <img 
+                      src={selectedFile ? URL.createObjectURL(selectedFile) : uploadResult.imageUrl} 
+                      alt="Uploaded road" 
+                      className="w-full rounded-lg border border-gray-300"
+                    />
+                    {uploadResult.cracks && uploadResult.cracks.length > 0 && (
+                      <div className="mt-4 p-4 bg-white rounded-lg">
+                        <h4 className="font-semibold mb-2">Crack Details:</h4>
+                        <div className="grid grid-cols-2 gap-2 text-sm">
+                          {uploadResult.cracks.map((crack, idx) => (
+                            <div key={idx} className="border border-gray-300 p-2 rounded">
+                              <strong>Crack {idx + 1}:</strong> Position ({Math.round(crack.x)}, {Math.round(crack.y)})
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             )}
 
