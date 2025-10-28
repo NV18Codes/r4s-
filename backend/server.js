@@ -481,6 +481,26 @@ app.post('/api/v1/organizations', authenticateToken, async (req, res) => {
   }
 });
 
+// Singular organization endpoint (for backward compatibility)
+app.get('/api/v1/organization', authenticateToken, async (req, res) => {
+  try {
+    const { data: organizations, error } = await supabase
+      .from('organizations')
+      .select('*')
+      .order('created_at', { ascending: false });
+    
+    if (error) {
+      console.error('Get organizations error:', error);
+      return sendErrorResponse(res, 'Failed to retrieve organizations', 500);
+    }
+    
+    sendSuccessResponse(res, organizations || [], 'Organizations retrieved successfully');
+  } catch (error) {
+    console.error('Get organizations error:', error);
+    sendErrorResponse(res, 'Failed to retrieve organizations', 500);
+  }
+});
+
 app.get('/api/v1/organizations/:id', authenticateToken, async (req, res) => {
   try {
     const { id } = req.params;
