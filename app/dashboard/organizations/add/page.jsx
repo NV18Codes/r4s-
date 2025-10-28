@@ -144,9 +144,9 @@ export default function AddOrganizationPage() {
                 <option value="" disabled>
                   Select Type
                 </option>
-                <option value="government">Government</option>
+                <option value="government">Public</option>
                 <option value="private">Private</option>
-                <option value="ngo">NGO</option>
+                <option value="ngo">Non-Profit</option>
               </select>
               <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
                 <svg

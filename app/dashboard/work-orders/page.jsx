@@ -24,7 +24,7 @@ export default function WorkOrdersPage() {
         accept: "application/json",
       };
 
-      const res = await fetch(getApiUrl("/api/workorder"), { headers });
+      const res = await fetch(getApiUrl("/api/v1/workorders"), { headers });
       const data = await res.json();
 
       if (res.ok && data?.meta?.status === "Success") {

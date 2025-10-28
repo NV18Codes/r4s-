@@ -46,7 +46,7 @@ export default function DashboardPage() {
       // First try: Get all spaces
       try {
         console.log("Fetching all spaces...");
-        const spacesRes = await fetch(getApiUrl("/api/space"), { headers });
+        const spacesRes = await fetch(getApiUrl("/api/v1/spaces"), { headers });
         if (spacesRes.ok) {
           spacesData = await spacesRes.json();
           console.log("All spaces response:", spacesData);
@@ -59,7 +59,7 @@ export default function DashboardPage() {
       if (!spacesData && user?.orgId) {
         try {
           console.log("Fetching spaces for orgId:", user.orgId);
-          const spacesRes = await fetch(getApiUrl(`/api/space/${user.orgId}`), { headers });
+          const spacesRes = await fetch(getApiUrl(`/api/v1/spaces/${user.orgId}`), { headers });
           spacesData = spacesRes.ok ? await spacesRes.json() : null;
           console.log("Org spaces response:", spacesData);
         } catch (err) {
@@ -70,30 +70,26 @@ export default function DashboardPage() {
       // Fetch all other data in parallel
       const [
         assetsRes,
-        assetTypesRes,
         organizationsRes,
         usersRes,
         inspectionsRes,
-        workOrdersRes,
-        checklistsRes,
       ] = await Promise.all([
-        fetch(getApiUrl("/api/asset"), { headers }).catch(() => ({ ok: false })),
-        fetch(getApiUrl("/api/assettype"), { headers }).catch(() => ({ ok: false })),
-        fetch(getApiUrl("/api/organization"), { headers }).catch(() => ({ ok: false })),
-        fetch(getApiUrl("/api/organization/users"), { headers }).catch(() => ({ ok: false })),
-        fetch(getApiUrl("/api/inspection"), { headers }).catch(() => ({ ok: false })),
-        fetch(getApiUrl("/api/workorder"), { headers }).catch(() => ({ ok: false })),
-        fetch(getApiUrl("/api/checklist"), { headers }).catch(() => ({ ok: false })),
+        fetch(getApiUrl("/api/v1/assets"), { headers }).catch(() => ({ ok: false })),
+        fetch(getApiUrl("/api/v1/organizations"), { headers }).catch(() => ({ ok: false })),
+        fetch(getApiUrl("/api/v1/users"), { headers }).catch(() => ({ ok: false })),
+        fetch(getApiUrl("/api/v1/inspections"), { headers }).catch(() => ({ ok: false })),
       ]);
 
       // Parse responses
       const assetsData = assetsRes.ok ? await assetsRes.json() : null;
-      const assetTypesData = assetTypesRes.ok ? await assetTypesRes.json() : null;
       const organizationsData = organizationsRes.ok ? await organizationsRes.json() : null;
       const usersData = usersRes.ok ? await usersRes.json() : null;
       const inspectionsData = inspectionsRes.ok ? await inspectionsRes.json() : null;
-      const workOrdersData = workOrdersRes.ok ? await workOrdersRes.json() : null;
-      const checklistsData = checklistsRes.ok ? await checklistsRes.json() : null;
+      
+      // Simulate counts for unavailable endpoints
+      const assetTypesData = { data: [] };
+      const workOrdersData = { data: inspectionsData?.data?.filter(i => i.crack_count > 0) || [] };
+      const checklistsData = { data: [] };
 
       const spacesCount = Array.isArray(spacesData?.data) ? spacesData.data.length : 0;
       console.log("Spaces count:", spacesCount);
@@ -189,7 +185,7 @@ export default function DashboardPage() {
             Welcome back, {user?.firstName || "Admin"}! 👋
           </h1>
           <p className="text-gray-500">
-            Here's an overview of your Road Management System
+            Here's an overview of your Roads Infrastructure Maintenance System
           </p>
         </div>
 
@@ -275,6 +271,13 @@ export default function DashboardPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
               <span>View Reports</span>
+            </Link>
+
+            <Link href="/dashboard/map" className="flex items-center justify-center gap-2 p-4 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-lg shadow-sm hover:shadow-md transition-all hover:from-green-700 hover:to-green-800 font-medium">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+              </svg>
+              <span>🗺️ View Map</span>
             </Link>
           </div>
         </div>

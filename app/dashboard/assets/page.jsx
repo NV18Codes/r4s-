@@ -57,7 +57,7 @@ export default function AssetsPage() {
       setLoading(true);
       setError("");
       try {
-        const res = await fetch(getApiUrl("/api/asset"), {
+        const res = await fetch(getApiUrl("/api/v1/assets"), {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
@@ -105,7 +105,7 @@ export default function AssetsPage() {
 
     setDeleting(true);
     try {
-      const res = await fetch(getApiUrl(`/api/asset?AssetId=${assetId}`), {
+      const res = await fetch(getApiUrl(`/api/v1/assets/${assetId}`), {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,

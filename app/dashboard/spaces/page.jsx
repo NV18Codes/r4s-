@@ -40,7 +40,7 @@ export default function SpacesPage() {
         if (userOrgId) {
           try {
             console.log("Trying user's orgId:", userOrgId);
-            const userRes = await fetch(getApiUrl(`/api/space/${userOrgId}`), {
+            const userRes = await fetch(getApiUrl(`/api/v1/spaces/${userOrgId}`), {
               headers: {
                 Authorization: `Bearer ${token}`,
                 "Content-Type": "application/json",
@@ -64,7 +64,7 @@ export default function SpacesPage() {
         if (spacesData.length === 0) {
           try {
             console.log("Trying known space orgId:", knownSpaceOrgId);
-            const spaceRes = await fetch(getApiUrl(`/api/space/${knownSpaceOrgId}`), {
+            const spaceRes = await fetch(getApiUrl(`/api/v1/spaces/${knownSpaceOrgId}`), {
               headers: {
                 Authorization: `Bearer ${token}`,
                 "Content-Type": "application/json",
@@ -88,7 +88,7 @@ export default function SpacesPage() {
         if (spacesData.length === 0) {
           try {
             console.log("Trying all spaces endpoint");
-            const allRes = await fetch(getApiUrl("/api/space"), {
+            const allRes = await fetch(getApiUrl("/api/v1/spaces"), {
               headers: {
                 Authorization: `Bearer ${token}`,
                 "Content-Type": "application/json",

@@ -176,7 +176,7 @@ export default function CommunityPage() {
                 </div>
                 <h3 className="text-xl font-semibold text-[#005580] mb-4">Discussion Forums</h3>
                 <p className="text-gray-600">
-                  Engage in meaningful discussions about road management challenges, solutions, and industry trends.
+                  Engage in meaningful discussions about roads infrastructure maintenance challenges, solutions, and industry trends.
                 </p>
               </div>
 
@@ -236,7 +236,7 @@ export default function CommunityPage() {
                 </div>
                 <h3 className="text-xl font-semibold text-[#005580] mb-4">Certification Program</h3>
                 <p className="text-gray-600">
-                  Earn professional certifications and badges to showcase your expertise in road management.
+                  Earn professional certifications and badges to showcase your expertise in roads infrastructure maintenance.
                 </p>
               </div>
             </div>
@@ -249,7 +249,7 @@ export default function CommunityPage() {
             <div className="text-center mb-16">
               <h2 className="text-3xl font-bold text-[#005580] mb-4">Success Stories</h2>
               <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                Hear from community members who have transformed their road management operations
+                Hear from community members who have transformed their roads infrastructure maintenance operations
               </p>
             </div>
             
@@ -309,7 +309,7 @@ export default function CommunityPage() {
               Join Our Community Today
             </h2>
             <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-              Connect with thousands of infrastructure professionals and start your journey towards better road management.
+              Connect with thousands of infrastructure professionals and start your journey towards better roads infrastructure maintenance.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                     <Link 
