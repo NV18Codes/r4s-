@@ -1,0 +1,18 @@
+# Copy and paste these commands to install dependencies
+
+npm install @nestjs/common @nestjs/core @nestjs/platform-fastify @fastify/multipart @nestjs/config @nestjs/bullmq @prisma/client bullmq ioredis nanoid reflect-metadata rxjs
+
+npm install --save-dev @nestjs/cli @nestjs/schematics @types/node prisma typescript ts-node
+
+# Then run:
+npx prisma generate
+
+# Then run:
+npx prisma db push
+
+# Then start Redis (using Docker):
+docker run -d -p 6379:6379 --name redis redis:7-alpine
+
+# Then start backend:
+npm run start:dev
+
