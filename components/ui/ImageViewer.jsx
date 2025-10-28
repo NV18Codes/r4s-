@@ -128,7 +128,10 @@ export default function ImageViewer({
                         top: `${topPercent}%`,
                         width: `${widthPercent}%`,
                         height: `${heightPercent}%`,
-                        border: `3px solid ${color}`,
+                        border: `4px solid ${color}`,
+                        backgroundColor: `${color}20`, // Semi-transparent background
+                        borderRadius: '4px',
+                        boxShadow: `0 0 10px ${color}80`, // Glowing effect
                         pointerEvents: 'none'
                       }}
                     />
