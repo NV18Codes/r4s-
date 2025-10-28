@@ -46,7 +46,7 @@ export default function DashboardPage() {
       // First try: Get all spaces
       try {
         console.log("Fetching all spaces...");
-        const spacesRes = await fetch(getApiUrl("/api/space"), { headers });
+        const spacesRes = await fetch(getApiUrl("/api/v1/space"), { headers });
         if (spacesRes.ok) {
           spacesData = await spacesRes.json();
           console.log("All spaces response:", spacesData);
@@ -59,7 +59,7 @@ export default function DashboardPage() {
       if (!spacesData && user?.orgId) {
         try {
           console.log("Fetching spaces for orgId:", user.orgId);
-          const spacesRes = await fetch(getApiUrl(`/api/space/${user.orgId}`), { headers });
+          const spacesRes = await fetch(getApiUrl(`/api/v1/space/${user.orgId}`), { headers });
           spacesData = spacesRes.ok ? await spacesRes.json() : null;
           console.log("Org spaces response:", spacesData);
         } catch (err) {
@@ -77,13 +77,13 @@ export default function DashboardPage() {
         workOrdersRes,
         checklistsRes,
       ] = await Promise.all([
-        fetch(getApiUrl("/api/asset"), { headers }).catch(() => ({ ok: false })),
-        fetch(getApiUrl("/api/assettype"), { headers }).catch(() => ({ ok: false })),
-        fetch(getApiUrl("/api/organization"), { headers }).catch(() => ({ ok: false })),
-        fetch(getApiUrl("/api/organization/users"), { headers }).catch(() => ({ ok: false })),
-        fetch(getApiUrl("/api/inspection"), { headers }).catch(() => ({ ok: false })),
-        fetch(getApiUrl("/api/workorder"), { headers }).catch(() => ({ ok: false })),
-        fetch(getApiUrl("/api/checklist"), { headers }).catch(() => ({ ok: false })),
+        fetch(getApiUrl("/api/v1/asset"), { headers }).catch(() => ({ ok: false })),
+        fetch(getApiUrl("/api/v1/assettype"), { headers }).catch(() => ({ ok: false })),
+        fetch(getApiUrl("/api/v1/organization"), { headers }).catch(() => ({ ok: false })),
+        fetch(getApiUrl("/api/v1/organization/users"), { headers }).catch(() => ({ ok: false })),
+        fetch(getApiUrl("/api/v1/inspection"), { headers }).catch(() => ({ ok: false })),
+        fetch(getApiUrl("/api/v1/workorder"), { headers }).catch(() => ({ ok: false })),
+        fetch(getApiUrl("/api/v1/checklist"), { headers }).catch(() => ({ ok: false })),
       ]);
 
       // Parse responses
