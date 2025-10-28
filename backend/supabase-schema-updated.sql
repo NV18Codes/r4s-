@@ -1,9 +1,6 @@
 -- Updated Supabase Schema for RoadsIntel with Image Storage
 -- Run this in Supabase SQL Editor
 
--- Enable RLS
-ALTER DATABASE postgres SET "app.jwt_secret" TO 'your-jwt-secret';
-
 -- Create users table
 CREATE TABLE IF NOT EXISTS users (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
