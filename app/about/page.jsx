@@ -127,7 +127,7 @@ export default function AboutPage() {
                 About RoadsIntel
               </h1>
               <p className="text-xl text-gray-600 mb-8">
-                Revolutionizing road management through innovative technology and data-driven solutions
+                Revolutionizing roads infrastructure maintenance through innovative technology and data-driven solutions
               </p>
             </div>
           </div>
@@ -177,7 +177,7 @@ export default function AboutPage() {
                 <div className="space-y-6">
                   <div>
                     <h4 className="text-lg font-semibold mb-2">Industry Expertise</h4>
-                    <p className="text-blue-100">Built by infrastructure professionals who understand the unique challenges of road management.</p>
+                    <p className="text-blue-100">Built by infrastructure professionals who understand the unique challenges of roads infrastructure maintenance.</p>
                   </div>
                   <div>
                     <h4 className="text-lg font-semibold mb-2">Cutting-Edge Technology</h4>
@@ -185,7 +185,7 @@ export default function AboutPage() {
                   </div>
                   <div>
                     <h4 className="text-lg font-semibold mb-2">Proven Results</h4>
-                    <p className="text-blue-100">Trusted by organizations worldwide to improve their road management operations.</p>
+                    <p className="text-blue-100">Trusted by organizations worldwide to improve their roads infrastructure maintenance operations.</p>
                   </div>
                 </div>
               </div>
@@ -212,7 +212,7 @@ export default function AboutPage() {
                 </div>
                 <h3 className="text-xl font-semibold text-[#005580] mb-4">Innovation</h3>
                 <p className="text-gray-600">
-                  We continuously push the boundaries of what's possible in road management technology.
+                  We continuously push the boundaries of what's possible in roads infrastructure maintenance technology.
                 </p>
               </div>
 
@@ -250,7 +250,7 @@ export default function AboutPage() {
               Ready to Join Our Mission?
             </h2>
             <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-              Be part of the future of road management. Start your journey with RoadsIntel today.
+              Be part of the future of roads infrastructure maintenance. Start your journey with RoadsIntel today.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Link 

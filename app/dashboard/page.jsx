@@ -189,7 +189,7 @@ export default function DashboardPage() {
             Welcome back, {user?.firstName || "Admin"}! 👋
           </h1>
           <p className="text-gray-500">
-            Here's an overview of your Road Management System
+            Here's an overview of your Roads Infrastructure Maintenance System
           </p>
         </div>
 

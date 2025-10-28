@@ -127,7 +127,7 @@ export default function Home() {
                 Welcome to <span className="text-[#0077b6]">RoadsIntel</span>
               </h1>
               <p className="text-lg sm:text-xl lg:text-2xl text-gray-600 mb-8 max-w-3xl mx-auto leading-relaxed">
-                Advanced Road Management System for Modern Infrastructure
+                Roads Infrastructure Maintenance System for Modern Infrastructure
               </p>
               <p className="text-base sm:text-lg text-gray-500 mb-12 max-w-2xl mx-auto">
                 Streamline your road maintenance, inspections, and asset management with our comprehensive digital platform designed for infrastructure professionals.
@@ -155,7 +155,7 @@ export default function Home() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="text-3xl sm:text-4xl font-bold text-[#005580] mb-4">
-                Powerful Features for Road Management
+                Powerful Features for Roads Infrastructure Maintenance
               </h2>
               <p className="text-lg text-gray-600 max-w-2xl mx-auto">
                 Everything you need to manage roads, assets, and inspections in one comprehensive platform
@@ -248,10 +248,10 @@ export default function Home() {
         <section className="py-20 bg-gradient-to-r from-[#005580] to-[#0077b6]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
-              Ready to Transform Your Road Management?
+              Ready to Transform Your Roads Infrastructure Maintenance?
             </h2>
             <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-              Join thousands of infrastructure professionals who trust RoadsIntel for their road management needs.
+              Join thousands of infrastructure professionals who trust RoadsIntel for their roads infrastructure maintenance needs.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Link 
@@ -286,7 +286,7 @@ export default function Home() {
                 <span className="text-xl font-bold text-white">RoadsIntel</span>
               </div>
               <p className="text-blue-100 text-sm">
-                Advanced road management system for modern infrastructure professionals.
+                Roads Infrastructure Maintenance System for modern infrastructure professionals.
               </p>
             </div>
             

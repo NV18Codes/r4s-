@@ -347,7 +347,7 @@ export default function DashboardLayout({ children }) {
               <img src="/new_logo.jpeg" alt="RoadsIntel" className="h-8 w-auto" />
               <div className="text-sm">
                 <p className="font-semibold">RoadsIntel</p>
-                <p className="text-xs text-white/80">Road Management System</p>
+                <p className="text-xs text-white/80">Roads Infrastructure Maintenance System</p>
               </div>
             </div>
             
