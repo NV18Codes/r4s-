@@ -357,6 +357,27 @@ app.post('/api/v1/spaces', authenticateToken, async (req, res) => {
   }
 });
 
+app.get('/api/v1/spaces/:organizationId', authenticateToken, async (req, res) => {
+  try {
+    const { organizationId } = req.params;
+    const { data: spaces, error } = await supabase
+      .from('spaces')
+      .select('*')
+      .eq('organization_id', organizationId)
+      .order('created_at', { ascending: false });
+    
+    if (error) {
+      console.error('Get organization spaces error:', error);
+      return sendErrorResponse(res, 'Failed to retrieve spaces', 500);
+    }
+    
+    sendSuccessResponse(res, spaces || [], 'Spaces retrieved successfully');
+  } catch (error) {
+    console.error('Get organization spaces error:', error);
+    sendErrorResponse(res, 'Failed to retrieve spaces', 500);
+  }
+});
+
 // Assets Routes
 app.get('/api/v1/assets', authenticateToken, async (req, res) => {
   try {
@@ -454,6 +475,27 @@ app.post('/api/v1/organizations', authenticateToken, async (req, res) => {
   } catch (error) {
     console.error('Create organization error:', error);
     sendErrorResponse(res, 'Failed to create organization', 500);
+  }
+});
+
+app.get('/api/v1/organizations/:id', authenticateToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { data: organization, error } = await supabase
+      .from('organizations')
+      .select('*')
+      .eq('id', id)
+      .single();
+    
+    if (error) {
+      console.error('Get organization error:', error);
+      return sendErrorResponse(res, 'Failed to retrieve organization', 500);
+    }
+    
+    sendSuccessResponse(res, organization, 'Organization retrieved successfully');
+  } catch (error) {
+    console.error('Get organization error:', error);
+    sendErrorResponse(res, 'Failed to retrieve organization', 500);
   }
 });
 

@@ -136,18 +136,14 @@ export default function CommunityPage() {
         {/* Community Stats */}
         <section className="py-20 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
               <div className="bg-gray-50 rounded-xl p-8">
-                <div className="text-4xl font-bold text-[#005580] mb-2">10,000+</div>
+                <div className="text-4xl font-bold text-[#005580] mb-2">100+</div>
                 <div className="text-gray-600">Active Users</div>
               </div>
               <div className="bg-gray-50 rounded-xl p-8">
-                <div className="text-4xl font-bold text-[#005580] mb-2">500+</div>
+                <div className="text-4xl font-bold text-[#005580] mb-2">10+</div>
                 <div className="text-gray-600">Organizations</div>
-              </div>
-              <div className="bg-gray-50 rounded-xl p-8">
-                <div className="text-4xl font-bold text-[#005580] mb-2">50+</div>
-                <div className="text-gray-600">Countries</div>
               </div>
               <div className="bg-gray-50 rounded-xl p-8">
                 <div className="text-4xl font-bold text-[#005580] mb-2">99.9%</div>
