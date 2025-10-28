@@ -1,4 +1,4 @@
-import CrackDetectionCanvas from "../../../components/ui/CrackDetectionCanvas";
+import ImageViewer from "../../../components/ui/ImageViewer";
 
 export default function InspectionsPage() {
   const { token, user } = useAuth();
@@ -214,19 +214,16 @@ export default function InspectionsPage() {
                   <div className="border-2 border-gray-300 rounded-lg p-4 bg-gray-50">
                     <h3 className="text-lg font-semibold mb-3 text-gray-900">Crack Detection Results</h3>
                     
-                    {/* AI Crack Detection Canvas */}
+                    {/* Image Viewer with Download */}
                     {uploadResult.originalImageUrl && (
                       <div className="border-2 border-gray-300 rounded-lg p-4 bg-gray-50">
-                        <h3 className="text-lg font-semibold mb-3 text-gray-900 flex items-center gap-2">
-                          <span className="text-xl">🤖</span>
-                          AI Crack Detection Results
-                        </h3>
-                        
-                        <CrackDetectionCanvas
+                        <ImageViewer
                           originalImageUrl={uploadResult.originalImageUrl}
+                          annotatedImageUrl={uploadResult.annotatedImageUrl}
                           cracks={uploadResult.cracks || []}
                           severity={uploadResult.severity}
                           crackCount={uploadResult.crackCount}
+                          inspectionId={uploadResult.inspection?.id || 'temp'}
                         />
                       </div>
                     )}
@@ -314,10 +311,13 @@ export default function InspectionsPage() {
               <thead className="bg-gray-50">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Image
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Inspection ID
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Type
+                    Cracks Found
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Status
@@ -336,11 +336,37 @@ export default function InspectionsPage() {
               <tbody className="bg-white divide-y divide-gray-200">
                 {inspections.map((inspection) => (
                   <tr key={inspection.inspectionId || inspection.id} className="hover:bg-gray-50">
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {inspection.original_image_url ? (
+                        <img 
+                          src={inspection.original_image_url} 
+                          alt="Inspection" 
+                          className="w-16 h-12 object-cover rounded-lg border border-gray-300"
+                        />
+                      ) : (
+                        <div className="w-16 h-12 bg-gray-200 rounded-lg flex items-center justify-center">
+                          <span className="text-gray-400 text-xs">No Image</span>
+                        </div>
+                      )}
+                    </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                       {inspection.inspectionId || inspection.id}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {inspection.type || inspection.inspectionType || "General"}
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center gap-2">
+                        <span className={`text-sm font-semibold ${
+                          inspection.crack_count > 3 ? 'text-red-600' : 
+                          inspection.crack_count > 1 ? 'text-orange-600' : 'text-green-600'
+                        }`}>
+                          {inspection.crack_count || 0}
+                        </span>
+                        <span className={`text-xs px-2 py-1 rounded-full ${
+                          inspection.crack_severity === 'High' ? 'bg-red-100 text-red-800' : 
+                          inspection.crack_severity === 'Medium' ? 'bg-orange-100 text-orange-800' : 'bg-yellow-100 text-yellow-800'
+                        }`}>
+                          {inspection.crack_severity || 'Low'}
+                        </span>
+                      </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
@@ -351,18 +377,15 @@ export default function InspectionsPage() {
                       {inspection.inspector || inspection.inspectorName || "N/A"}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {inspection.inspectionDate ? new Date(inspection.inspectionDate).toLocaleDateString() : "N/A"}
+                      {inspection.inspection_date ? new Date(inspection.inspection_date).toLocaleDateString() : "N/A"}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                       <Link
                         href={`/dashboard/inspections/${inspection.inspectionId || inspection.id}`}
                         className="text-[#005580] hover:text-[#004466] mr-3"
                       >
-                        View
+                        View Details
                       </Link>
-                      <button className="text-red-600 hover:text-red-900">
-                        Delete
-                      </button>
                     </td>
                   </tr>
                 ))}

@@ -677,12 +677,88 @@ async function detectCracks(imagePath) {
   };
 }
 
-// Work Orders Routes
-app.get('/api/v1/workorders', authenticateToken, async (req, res) => {
+// Get inspection with images
+app.get('/api/v1/inspections/:id', authenticateToken, async (req, res) => {
   try {
+    const { id } = req.params;
+    
+    const { data: inspection, error } = await supabase
+      .from('inspections')
+      .select('*')
+      .eq('id', id)
+      .single();
+    
+    if (error) {
+      console.error('Get inspection error:', error);
+      return sendErrorResponse(res, 'Failed to retrieve inspection', 500);
+    }
+    
+    sendSuccessResponse(res, inspection, 'Inspection retrieved successfully');
+  } catch (error) {
+    console.error('Get inspection error:', error);
+    sendErrorResponse(res, 'Failed to retrieve inspection', 500);
+  }
+});
+
+// Get all inspections with images
+app.get('/api/v1/inspections', authenticateToken, async (req, res) => {
+  try {
+    const { data: inspections, error } = await supabase
+      .from('inspections')
+      .select('*')
+      .order('created_at', { ascending: false });
+    
+    if (error) {
+      console.error('Get inspections error:', error);
+      return sendErrorResponse(res, 'Failed to retrieve inspections', 500);
+    }
+    
+    sendSuccessResponse(res, inspections || [], 'Inspections retrieved successfully');
+  } catch (error) {
+    console.error('Get inspections error:', error);
+    sendErrorResponse(res, 'Failed to retrieve inspections', 500);
+  }
+});
+
+// Download image endpoint
+app.get('/api/v1/images/:filename', authenticateToken, async (req, res) => {
+  try {
+    const { filename } = req.params;
+    
+    // Get image from Supabase Storage
+    const { data, error } = await supabase.storage
+      .from('road-images')
+      .download(filename);
+    
+    if (error) {
+      console.error('Download error:', error);
+      return sendErrorResponse(res, 'Image not found', 404);
+    }
+    
+    // Convert blob to buffer
+    const arrayBuffer = await data.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+    
+    // Set headers for download
+    res.setHeader('Content-Type', 'image/jpeg');
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+    res.send(buffer);
+    
+  } catch (error) {
+    console.error('Download error:', error);
+    sendErrorResponse(res, 'Failed to download image', 500);
+  }
+});
+
+// Get work orders for inspection
+app.get('/api/v1/inspections/:id/workorders', authenticateToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    
     const { data: workOrders, error } = await supabase
       .from('work_orders')
       .select('*')
+      .eq('inspection_id', id)
       .order('created_at', { ascending: false });
     
     if (error) {
