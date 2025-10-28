@@ -20,7 +20,6 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE TABLE IF NOT EXISTS organizations (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    code VARCHAR(50) UNIQUE NOT NULL,
     description TEXT,
     address TEXT,
     contact_email VARCHAR(255),
@@ -151,9 +150,9 @@ INSERT INTO users (email, password, first_name, last_name, role, organization) V
 ('inspector@roadsintel.com', '$2a$10$eBuLzOs7o3HrhSKb86DD/uKd3LVtoH1GcS7jYoksWNvLxmBrxg.G6', 'Inspector', 'User', 'Inspector', 'RoadsIntel')
 ON CONFLICT (email) DO NOTHING;
 
-INSERT INTO organizations (name, code, description, contact_email) VALUES
-('RoadsIntel Corporation', 'RINTEL', 'Leading road inspection technology company', 'contact@roadsintel.com')
-ON CONFLICT (code) DO NOTHING;
+INSERT INTO organizations (name, description, contact_email) VALUES
+('RoadsIntel Corporation', 'Leading road inspection technology company', 'contact@roadsintel.com')
+ON CONFLICT (name) DO NOTHING;
 
 INSERT INTO asset_types (name, description) VALUES
 ('Road Surface', 'Asphalt and concrete road surfaces'),
