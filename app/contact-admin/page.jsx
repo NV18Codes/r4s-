@@ -62,18 +62,6 @@ export default function ContactAdminPage() {
             {/* Desktop Navigation Links */}
             <nav className="hidden md:flex items-center space-x-8">
               <Link 
-                href="/about" 
-                className="text-[#005580] hover:text-[#004466] font-medium transition-colors duration-200"
-              >
-                About
-              </Link>
-              <Link 
-                href="/community" 
-                className="text-[#005580] hover:text-[#004466] font-medium transition-colors duration-200"
-              >
-                Community
-              </Link>
-              <Link 
                 href="/contact-admin" 
                 className="text-[#005580] hover:text-[#004466] font-medium transition-colors duration-200 border-b-2 border-[#005580]"
               >
@@ -113,20 +101,6 @@ export default function ContactAdminPage() {
         {mobileMenuOpen && (
           <div className="md:hidden bg-white border-t border-gray-100 shadow-lg">
             <div className="px-4 py-2 space-y-1">
-              <Link 
-                href="/about" 
-                className="block px-3 py-2 text-[#005580] hover:text-[#004466] font-medium"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                About
-              </Link>
-              <Link 
-                href="/community" 
-                className="block px-3 py-2 text-[#005580] hover:text-[#004466] font-medium"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Community
-              </Link>
               <Link 
                 href="/contact-admin" 
                 className="block px-3 py-2 text-[#005580] hover:text-[#004466] font-medium bg-blue-50"
@@ -359,7 +333,7 @@ export default function ContactAdminPage() {
                     </div>
                     <div>
                       <h3 className="text-lg font-semibold text-[#005580] mb-2">Business Hours</h3>
-                      <p className="text-gray-600">Monday - Friday: 8:00 AM - 5:00 PM</p>
+                      <p className="text-gray-600">Monday - Friday: 8:00 AM - 4:00 PM</p>
                       <p className="text-gray-600">Weekends: Closed</p>
                     </div>
                   </div>
@@ -377,9 +351,6 @@ export default function ContactAdminPage() {
                     </Link>
                     <Link href="/status" className="block text-[#005580] hover:text-[#004466] transition-colors">
                       System Status
-                    </Link>
-                    <Link href="/community" className="block text-[#005580] hover:text-[#004466] transition-colors">
-                      Community Forum
                     </Link>
                   </div>
                 </div>
