@@ -151,14 +151,12 @@ INSERT INTO users (email, password, first_name, last_name, role, organization) V
 ON CONFLICT (email) DO NOTHING;
 
 INSERT INTO organizations (name, description, contact_email) VALUES
-('RoadsIntel Corporation', 'Leading road inspection technology company', 'contact@roadsintel.com')
-ON CONFLICT (name) DO NOTHING;
+('RoadsIntel Corporation', 'Leading road inspection technology company', 'contact@roadsintel.com');
 
 INSERT INTO asset_types (name, description) VALUES
 ('Road Surface', 'Asphalt and concrete road surfaces'),
 ('Bridge', 'Bridge structures and components'),
-('Signage', 'Road signs and traffic control devices')
-ON CONFLICT DO NOTHING;
+('Signage', 'Road signs and traffic control devices');
 
 -- Create storage bucket for images
 INSERT INTO storage.buckets (id, name, public) VALUES ('road-images', 'road-images', true)
