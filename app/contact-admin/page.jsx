@@ -316,9 +316,9 @@ export default function ContactAdminPage() {
                     <div>
                       <h3 className="text-lg font-semibold text-[#005580] mb-2">Email Us</h3>
                       <p className="text-gray-600 mb-1">General inquiries</p>
-                      <p className="text-[#005580] font-medium">info@roadsintel.com</p>
+                      <p className="text-[#005580] font-medium">info@roadsintel.co.za</p>
                       <p className="text-gray-600 mb-1 mt-2">Support</p>
-                      <p className="text-[#005580] font-medium">support@roadsintel.com</p>
+                      <p className="text-[#005580] font-medium">support@roadsintel.co.za</p>
                     </div>
                   </div>
 
@@ -330,10 +330,8 @@ export default function ContactAdminPage() {
                     </div>
                     <div>
                       <h3 className="text-lg font-semibold text-[#005580] mb-2">Call Us</h3>
-                      <p className="text-gray-600 mb-1">Sales & General</p>
-                      <p className="text-[#005580] font-medium">+1 (555) 123-4567</p>
-                      <p className="text-gray-600 mb-1 mt-2">Technical Support</p>
-                      <p className="text-[#005580] font-medium">+1 (555) 123-4568</p>
+                      <p className="text-gray-600 mb-1">Main</p>
+                      <p className="text-[#005580] font-medium">+27 39 940 6729</p>
                     </div>
                   </div>
 
@@ -346,9 +344,10 @@ export default function ContactAdminPage() {
                     </div>
                     <div>
                       <h3 className="text-lg font-semibold text-[#005580] mb-2">Visit Us</h3>
-                      <p className="text-gray-600">123 Infrastructure Drive</p>
-                      <p className="text-gray-600">Tech City, TC 12345</p>
-                      <p className="text-gray-600">United States</p>
+                      <p className="text-gray-600">RoadsIntel Pty Ltd</p>
+                      <p className="text-gray-600">Corner Pioneer Avenue & Elizabeth Rd</p>
+                      <p className="text-gray-600">International Business Gateway, Midridge Park</p>
+                      <p className="text-gray-600">Midrand, 1685</p>
                     </div>
                   </div>
 
@@ -360,9 +359,8 @@ export default function ContactAdminPage() {
                     </div>
                     <div>
                       <h3 className="text-lg font-semibold text-[#005580] mb-2">Business Hours</h3>
-                      <p className="text-gray-600">Monday - Friday: 9:00 AM - 6:00 PM</p>
-                      <p className="text-gray-600">Saturday: 10:00 AM - 4:00 PM</p>
-                      <p className="text-gray-600">Sunday: Closed</p>
+                      <p className="text-gray-600">Monday - Friday: 8:00 AM - 5:00 PM</p>
+                      <p className="text-gray-600">Weekends: Closed</p>
                     </div>
                   </div>
                 </div>
