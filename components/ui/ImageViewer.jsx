@@ -16,9 +16,16 @@ export default function ImageViewer({
   const [imageDimensions, setImageDimensions] = useState({ width: 0, height: 0 });
 
   useEffect(() => {
+    if (!originalImageUrl) return;
+    
     const img = new Image();
     img.onload = () => {
+      console.log('Image loaded:', { width: img.width, height: img.height, url: originalImageUrl });
       setImageDimensions({ width: img.width, height: img.height });
+    };
+    img.onerror = (e) => {
+      console.error('Image failed to load:', originalImageUrl, e);
+      setImageDimensions({ width: 800, height: 600 }); // Fallback dimensions
     };
     img.src = originalImageUrl;
   }, [originalImageUrl]);
