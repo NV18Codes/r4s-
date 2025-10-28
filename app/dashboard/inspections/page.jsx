@@ -1,4 +1,10 @@
+"use client";
+import { useState, useEffect } from 'react';
+import { useAuth } from "../../AuthContext";
+import { getApiUrl } from "../../../lib/api-config";
 import ImageViewer from "../../../components/ui/ImageViewer";
+import { toast } from 'sonner';
+import Link from 'next/link';
 
 export default function InspectionsPage() {
   const { token, user } = useAuth();

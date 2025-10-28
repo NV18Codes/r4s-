@@ -1,8 +1,8 @@
 "use client";
 import { useState, useEffect } from 'react';
-import { useAuth } from "../../AuthContext";
-import { getApiUrl } from "../../../lib/api-config";
-import ImageViewer from "../../../components/ui/ImageViewer";
+import { useAuth } from "../../../AuthContext";
+import { getApiUrl } from "../../../../lib/api-config";
+import ImageViewer from "../../../../components/ui/ImageViewer";
 import Link from "next/link";
 import { toast } from 'sonner';
 
