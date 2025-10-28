@@ -5,6 +5,7 @@ import Link from "next/link";
 import { toast } from "sonner";
 import { useAuth } from "../AuthContext";
 import LoadingButton from "../../components/ui/loading-button";
+import { getApiUrl } from "../../lib/api-config";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -19,9 +20,8 @@ export default function Login() {
     setLoading(true);
     
     try {
-      // For static export, call backend directly
-      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://your-backend-url.com';
-      const res = await fetch(`${backendUrl}/api/v1/User/signin`, {
+      // Use the centralized API configuration
+      const res = await fetch(getApiUrl('/api/User/signin'), {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",

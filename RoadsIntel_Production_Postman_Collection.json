@@ -1,0 +1,336 @@
+{
+  "info": {
+    "name": "RoadsIntel Production API",
+    "description": "Complete API collection for RoadsIntel production backend with Supabase",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/health",
+          "host": ["{{base_url}}"],
+          "path": ["health"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "User Login",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"admin@roadsintel.com\",\n  \"password\": \"password\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/v1/User/signin",
+          "host": ["{{base_url}}"],
+          "path": ["api", "v1", "User", "signin"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "User Signup",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"newuser@example.com\",\n  \"password\": \"password123\",\n  \"firstName\": \"New\",\n  \"lastName\": \"User\",\n  \"roleName\": \"Inspector\",\n  \"organizationName\": \"Test Organization\",\n  \"phoneNumber\": \"1234567890\",\n  \"address\": \"123 Test Street\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/v1/User/signup",
+          "host": ["{{base_url}}"],
+          "path": ["api", "v1", "User", "signup"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Dashboard Stats",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/v1/dashboard/stats",
+          "host": ["{{base_url}}"],
+          "path": ["api", "v1", "dashboard", "stats"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get All Spaces",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/v1/spaces",
+          "host": ["{{base_url}}"],
+          "path": ["api", "v1", "spaces"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Space",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Test Space\",\n  \"description\": \"A test space for demo\",\n  \"location\": \"Test Location\",\n  \"spaceType\": \"Office\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/v1/spaces",
+          "host": ["{{base_url}}"],
+          "path": ["api", "v1", "spaces"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get All Assets",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/v1/assets",
+          "host": ["{{base_url}}"],
+          "path": ["api", "v1", "assets"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Asset",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Test Asset\",\n  \"description\": \"A test asset for demo\",\n  \"assetType\": \"Equipment\",\n  \"location\": \"Test Location\",\n  \"status\": \"Active\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/v1/assets",
+          "host": ["{{base_url}}"],
+          "path": ["api", "v1", "assets"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get All Organizations",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/v1/organizations",
+          "host": ["{{base_url}}"],
+          "path": ["api", "v1", "organizations"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Organization",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Test Organization\",\n  \"description\": \"A test organization for demo\",\n  \"address\": \"123 Test Street\",\n  \"contactEmail\": \"contact@testorg.com\",\n  \"contactPhone\": \"1234567890\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/v1/organizations",
+          "host": ["{{base_url}}"],
+          "path": ["api", "v1", "organizations"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get All Inspections",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/v1/inspections",
+          "host": ["{{base_url}}"],
+          "path": ["api", "v1", "inspections"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Inspection",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Test Inspection\",\n  \"description\": \"A test inspection for demo\",\n  \"location\": \"Test Road Location\",\n  \"inspector\": \"Test Inspector\",\n  \"status\": \"Scheduled\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/v1/inspections",
+          "host": ["{{base_url}}"],
+          "path": ["api", "v1", "inspections"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Upload Image (Crack Detection)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}"
+          }
+        ],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "image",
+              "type": "file",
+              "src": []
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{base_url}}/api/v1/images/upload",
+          "host": ["{{base_url}}"],
+          "path": ["api", "v1", "images", "upload"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get All Work Orders",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/v1/workorders",
+          "host": ["{{base_url}}"],
+          "path": ["api", "v1", "workorders"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get All Users",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/v1/users",
+          "host": ["{{base_url}}"],
+          "path": ["api", "v1", "users"]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "https://your-railway-url.railway.app",
+      "description": "Replace with your actual Railway URL"
+    },
+    {
+      "key": "auth_token",
+      "value": "",
+      "description": "JWT token from login response"
+    }
+  ]
+}

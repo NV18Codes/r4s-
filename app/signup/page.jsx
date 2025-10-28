@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { getApiUrl } from "../../lib/api-config";
 
 export default function Signup() {
   const router = useRouter();
@@ -64,9 +65,8 @@ export default function Signup() {
     console.log("Sending signup data:", formData);
     
     try {
-      // For static export, call backend directly
-      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://your-backend-url.com';
-      const res = await fetch(`${backendUrl}/api/v1/User/signup`, {
+      // Use the centralized API configuration
+      const res = await fetch(getApiUrl('/api/User/signup'), {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",

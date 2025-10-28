@@ -83,40 +83,62 @@ export default function InspectionsPage() {
           const base64Data = reader.result;
           const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
           
-          // Use Netlify function if in production, or direct backend URL
+          // Detect environment
+          const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+          const isNetlify = window.location.hostname.includes('netlify.app');
+          
+          console.log('Environment:', { isLocal, isNetlify, backendUrl });
+          
+          // Use Netlify function if on Netlify domain, otherwise use localhost
           let uploadUrl;
-          if (backendUrl && backendUrl.includes('netlify')) {
+          if (isNetlify) {
             uploadUrl = '/.netlify/functions/upload-image';
           } else {
             uploadUrl = `${backendUrl || 'http://localhost:3001'}/images`;
           }
 
-          const requestBody = backendUrl && backendUrl.includes('netlify')
-            ? { image: base64Data, filename: selectedFile.name }
-            : base64Data;
+          const requestBody = { image: base64Data, filename: selectedFile.name };
 
+          console.log('Uploading to:', uploadUrl);
+          
           const res = await fetch(uploadUrl, {
             method: 'POST',
             headers: {
-              'Content-Type': backendUrl && backendUrl.includes('netlify') ? 'application/json' : 'application/json',
+              'Content-Type': 'application/json',
             },
-            body: backendUrl && backendUrl.includes('netlify') 
-              ? JSON.stringify(requestBody)
-              : base64Data,
+            body: JSON.stringify(requestBody),
           });
 
-          const data = await res.json();
-
-          if (res.ok) {
-            setUploadResult(data);
-            toast.success(`Detection complete! Found ${data.crackCount || 0} cracks`);
-            setSelectedFile(null);
-          } else {
-            toast.error(data.error || "Failed to upload image");
+          // Check if response is ok and has content
+          if (!res.ok) {
+            const errorText = await res.text();
+            console.error('Upload failed:', res.status, errorText);
+            toast.error(`Upload failed: ${res.statusText}`);
+            return;
           }
+
+          const text = await res.text();
+          if (!text) {
+            toast.error("Empty response from server");
+            return;
+          }
+
+          let data;
+          try {
+            data = JSON.parse(text);
+          } catch (jsonError) {
+            console.error('Failed to parse JSON:', text);
+            toast.error("Invalid response from server");
+            return;
+          }
+
+          // Success case - data is already parsed
+          setUploadResult(data);
+          toast.success(`Detection complete! Found ${data.crackCount || 0} cracks`);
+          setSelectedFile(null);
         } catch (error) {
           console.error("Upload error:", error);
-          toast.error("Failed to upload image");
+          toast.error(error.message || "Failed to upload image");
         } finally {
           setUploading(false);
         }
@@ -180,7 +202,7 @@ export default function InspectionsPage() {
             href="/dashboard/inspections/add"
             className="bg-[#005580] text-white px-4 py-2 rounded-lg hover:bg-[#004466] transition-colors font-medium"
           >
-            Add Inspection
+            + Add Inspection
           </Link>
         </div>
       </div>
@@ -258,7 +280,7 @@ export default function InspectionsPage() {
             href="/dashboard/inspections/add"
             className="bg-[#005580] text-white px-6 py-3 rounded-lg hover:bg-[#004466] transition-colors font-medium"
           >
-            Create Inspection
+            + Add Inspection
           </Link>
         </div>
       ) : (

@@ -72,6 +72,14 @@ exports.handler = async (event, context) => {
   if (event.httpMethod === 'POST') {
     try {
       // For simplicity, accept JSON with base64 encoded image
+      if (!event.body) {
+        return {
+          statusCode: 400,
+          headers,
+          body: JSON.stringify({ error: 'No request body provided' }),
+        };
+      }
+
       const body = JSON.parse(event.body);
       const base64Data = body.image;
       const filename = body.filename || 'upload.jpg';
