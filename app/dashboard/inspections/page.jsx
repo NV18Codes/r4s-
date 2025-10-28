@@ -30,7 +30,7 @@ export default function InspectionsPage() {
         accept: "application/json",
       };
 
-      const res = await fetch(getApiUrl("/api/inspections"), { 
+      const res = await fetch(getApiUrl("/api/v1/inspections"), { 
         headers,
         method: 'GET'
       });

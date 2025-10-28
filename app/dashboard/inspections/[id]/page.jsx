@@ -20,8 +20,9 @@ export default function InspectionDetailPage({ params }) {
   }, [token, params?.id]);
 
   const fetchInspection = async () => {
+    setLoading(true);
     try {
-      const res = await fetch(getApiUrl(`/api/inspections/${params.id}`), {
+      const res = await fetch(getApiUrl(`/api/v1/inspections/${params.id}`), {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
@@ -30,17 +31,25 @@ export default function InspectionDetailPage({ params }) {
 
       if (res.ok) {
         const data = await res.json();
-        setInspection(data.data);
+        if (data?.meta?.status === "Success") {
+          setInspection(data.data);
+        } else {
+          toast.error("Failed to load inspection details");
+        }
+      } else {
+        toast.error("Failed to load inspection details");
       }
     } catch (error) {
       console.error("Error fetching inspection:", error);
       toast.error("Failed to load inspection details");
+    } finally {
+      setLoading(false);
     }
   };
 
   const fetchWorkOrders = async () => {
     try {
-      const res = await fetch(getApiUrl(`/api/inspections/${params.id}/workorders`), {
+      const res = await fetch(getApiUrl(`/api/v1/inspections/${params.id}/workorders`), {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
@@ -49,7 +58,9 @@ export default function InspectionDetailPage({ params }) {
 
       if (res.ok) {
         const data = await res.json();
-        setWorkOrders(data.data || []);
+        if (data?.meta?.status === "Success") {
+          setWorkOrders(data.data || []);
+        }
       }
     } catch (error) {
       console.error("Error fetching work orders:", error);
