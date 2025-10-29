@@ -1,48 +1,12 @@
-# Use Netlify's Next.js plugin for automatic deployment
-[[plugins]]
-  package = "@netlify/plugin-nextjs"
-
 [build]
-  command = "npm run build"
   publish = ".next"
+  command = "npm run build"
 
 [build.environment]
   NODE_VERSION = "18"
   NETLIFY_BUILD_DEBUG = "true"
   NEXT_PUBLIC_BACKEND_URL = "https://r4s.onrender.com"
 
-# Headers for security and performance
-[[headers]]
-  for = "/*"
-  [headers.values]
-    X-Frame-Options = "DENY"
-    X-XSS-Protection = "1; mode=block"
-    X-Content-Type-Options = "nosniff"
-    Referrer-Policy = "strict-origin-when-cross-origin"
-
-# Cache static assets
-[[headers]]
-  for = "/_next/static/*"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
-
-# Cache images
-[[headers]]
-  for = "*.jpg"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000"
-
-[[headers]]
-  for = "*.jpeg"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000"
-
-[[headers]]
-  for = "*.png"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000"
-
-# Functions configuration
 [functions]
   directory = "netlify/functions"
   node_bundler = "esbuild"
