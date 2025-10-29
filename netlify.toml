@@ -8,6 +8,8 @@
 
 [build.environment]
   NODE_VERSION = "18"
+  NETLIFY_BUILD_DEBUG = "true"
+  NEXT_PUBLIC_BACKEND_URL = "https://r4s.onrender.com"
 
 # Headers for security and performance
 [[headers]]
@@ -44,9 +46,5 @@
 [functions]
   directory = "netlify/functions"
   node_bundler = "esbuild"
-
-# Increase function timeout and payload size for image uploads
-[[functions]]
-  function = "upload-image"
   timeout = 30
   max_payload = "15mb"
