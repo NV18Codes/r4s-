@@ -43,3 +43,10 @@
 # Functions configuration
 [functions]
   directory = "netlify/functions"
+  node_bundler = "esbuild"
+
+# Increase function timeout and payload size for image uploads
+[[functions]]
+  function = "upload-image"
+  timeout = 30
+  max_payload = "15mb"
